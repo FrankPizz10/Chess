@@ -1,0 +1,21 @@
+#Title {
+    font-size: 30px;
+}
+
+#TitleDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#ButtonDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#MakeMove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div id="TitleDiv">
+            <h1 id="Title">Frank Pizzella</h1>
+        </div>
+        <div id="ButtonDiv">
+            <button id="StartGame" onclick="createGame()">Create Game</button>
+            <button id="GetGame" onclick="getGameState()">Get Game</button>
+        </div>
+        <br>
+        <div id="MakeMove">
+            <!-- <button id="AddPiece" onclick="addPiece(player1, 'Queen')">Add Piece</button> -->
+            <!-- <button id="MovePiece" onclick="movePiece(player1, [0,3], [0,5])">Move Piece</button> -->
+            <form id="MoveInputForm" action="process.html" method="get">
+                Player Number: <input type="text" name="playerNum"><br><br>
+                Start Square: <input type="text" name="startSqr"><br><br>
+                End Square: <input type="text" name="endSqr"><br><br>
+                <input type="button" onclick="getMove()" value="Enter">
+            </form>
+        </div>
+        <script type="text/javascript" src="C:\Users\fpizzella\Documents\FrankPersonal\Projects\game.js">
+        </script>
+
+    </body>
+</html>
