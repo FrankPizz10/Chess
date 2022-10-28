@@ -88,7 +88,7 @@ function knightSquares(pieces: Piece[], position: Position): Position[] {
 }
 
 function pawnSquares(pieces: Piece[], position: Position, isWhite: boolean): Position[] {
-  const startRank = isWhite ? 1 : 6;
+  const startRank = isWhite ? 6 : 1;
   const moveLimit = position[1] === startRank ? 2 : 1;
   const mover = isWhite ? upMover : downMover;
   const squares = squaresInDirection(pieces, position, mover, moveLimit);
@@ -97,7 +97,7 @@ function pawnSquares(pieces: Piece[], position: Position, isWhite: boolean): Pos
   const upLeft = isWhite ? upLeftMover : downRightMover;
   const upRightPos = upRight(position);
   const upLeftPos = upLeft(position);
-  for (const pos of [upRightPos, upLeftPos]) {
+  for (const pos of [...squares, upRightPos, upLeftPos]) {
     const piece = pieces.find(isOccupied(pos));
     if (piece) {
       squares.push(pos);
