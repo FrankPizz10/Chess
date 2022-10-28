@@ -39,12 +39,3 @@ function isValidMove(state: GameState, move: Move): boolean {
   );
 }
 
-function isGameOver(state: GameState): boolean {
-  // is the game over?
-  return false;
-}
-
-function getWinner(state: GameState): string {
-  // who won?
-  return 'Not Implemented';
-}

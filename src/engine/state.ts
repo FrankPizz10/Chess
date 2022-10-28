@@ -7,7 +7,7 @@ export type GameState = {
   players: Player[];
 }
 
-export type Position = [number, number];
+export type Position = [number, number];  // [x, y]
 
 export type Piece = {
   isWhite: boolean;
