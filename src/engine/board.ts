@@ -18,6 +18,10 @@ export function movableSquares(state: GameState, piece: PieceType, position: Pos
   }
 }
 
+export function pieceOnSquare(pieces: Piece[], position: Position): Piece | undefined {
+  return pieces.find(isOccupied(position));
+}
+
 function isOccupied(position: Position) {
   return (piece: Piece) => !piece.isCaptured && samePosition(piece.position, position);
 }

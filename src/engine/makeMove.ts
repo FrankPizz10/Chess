@@ -13,7 +13,7 @@ export function makeMove(state: GameState, move: Move): GameState {
     return newState;
   }
   else {
-    return state;
+    throw new Error("Invalid move");
   }
 }
 

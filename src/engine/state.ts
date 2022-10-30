@@ -14,6 +14,7 @@ export type Piece = {
   type: PieceType;
   position: Position;
   isCaptured: boolean;
+  svg: string;
 }
 
 export enum PieceType {
@@ -65,12 +66,14 @@ function getStartingKings(): Piece[] {
       type: PieceType.King,
       position: [4, 7],
       isCaptured: false,
+      svg: './Pieces/WhiteKing.svg',
     },
     {
       isWhite: false,
       type:PieceType.King,
       position:[4, 0],
       isCaptured: false,
+      svg: './Pieces/BlackKing.svg',
     }
   ];
 }
@@ -82,12 +85,14 @@ function getStartingQueens(): Piece[] {
       type: PieceType.Queen,
       position: [3, 7],
       isCaptured: false,
+      svg: './Pieces/WhiteQueen.svg',
     },
     {
       isWhite: false,
       type:PieceType.Queen,
       position:[3, 0],
       isCaptured: false,
+      svg: './Pieces/BlackQueen.svg',
     }
   ];
 }
@@ -107,6 +112,7 @@ function getStartingBishops(): Piece[] {
           type: PieceType.Bishop,
           position: pos as Position,
           isCaptured: false,
+          svg: './Pieces/WhiteBishop.svg',
         }
       );
     }
@@ -117,6 +123,7 @@ function getStartingBishops(): Piece[] {
           type: PieceType.Bishop,
           position: pos as Position,
           isCaptured: false,
+          svg: './Pieces/BlackBishop.svg',
         }
       );
     }
@@ -139,6 +146,7 @@ function getStartingKnights() {
           type: PieceType.Knight,
           position: pos as Position,
           isCaptured: false,
+          svg: './Pieces/WhiteKnight.svg',
         }
       );
     }
@@ -149,6 +157,7 @@ function getStartingKnights() {
           type: PieceType.Knight,
           position: pos as Position,
           isCaptured: false,
+          svg: './Pieces/BlackKnight.svg',
         }
       );
     }
@@ -171,6 +180,7 @@ function getStartingRooks() {
           type: PieceType.Rook,
           position: pos as Position,
           isCaptured: false,
+          svg: './Pieces/WhiteRook.svg',
         }
       );
     }
@@ -181,6 +191,7 @@ function getStartingRooks() {
           type: PieceType.Rook,
           position: pos as Position,
           isCaptured: false,
+          svg: './Pieces/BlackRook.svg',
         }
       );
     }
@@ -197,6 +208,7 @@ function getStartingPawns() {
         type: PieceType.Pawn,
         position: [i, 6],
         isCaptured: false,
+        svg: './Pieces/WhitePawn.svg',
       }
     );
     pawns.push(
@@ -205,6 +217,7 @@ function getStartingPawns() {
         type: PieceType.Pawn,
         position: [i, 1],
         isCaptured: false,
+        svg: './Pieces/BlackPawn.svg',
       }
     );
   }
