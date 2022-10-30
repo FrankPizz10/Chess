@@ -7,6 +7,7 @@ export function makeMove(state: GameState, move: Move): GameState {
     const newState = {...state};
     const piece = newState.pieces.find(checkSquare(newState, move));
     if (piece) {
+      // test
       piece.position = move.to;
       newState.whiteToMove = !newState.whiteToMove;
     }
