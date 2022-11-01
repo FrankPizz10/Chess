@@ -1,8 +1,10 @@
+import { Move } from "./move";
 import { GameState, Piece, PieceType, Position, Square } from "./state";
-import { samePosition } from "./util";
+import { getSquareAtPosition, samePosition } from "./util";
 
-export function movableSquares(state: GameState, piece: PieceType, position: Position) {
-  switch (piece) {
+export function movableSquares(state: GameState, move: Move) {
+  const piece = state.board.find(getSquareAtPosition(move.from))?.piece;
+  switch (piece?.type) {
     case PieceType.King:
       return kingSquares(state.board, position);
     case PieceType.Queen:
