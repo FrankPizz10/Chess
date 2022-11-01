@@ -1,32 +1,36 @@
-import { GameState, Piece, PieceType, Position } from "./state";
+import { GameState, Piece, PieceType, Position, Square } from "./state";
 import { samePosition } from "./util";
 
 export function movableSquares(state: GameState, piece: PieceType, position: Position) {
   switch (piece) {
     case PieceType.King:
-      return kingSquares(state.pieces, position);
+      return kingSquares(state.board, position);
     case PieceType.Queen:
-      return queenSquares(state.pieces, position);
+      return queenSquares(state.board, position);
     case PieceType.Rook:
-      return rookSquares(state.pieces, position);
+      return rookSquares(state.board, position);
     case PieceType.Bishop:
-      return bishopSquares(state.pieces, position);
+      return bishopSquares(state.board, position);
     case PieceType.Knight:
-      return knightSquares(state.pieces, position);
+      return knightSquares(state.board, position);
     case PieceType.Pawn:
-      return pawnSquares(state.pieces, position, state.whiteToMove);
+      return pawnSquares(state.board, position, state.whiteToMove);
   }
 }
 
-export function pieceOnSquare(pieces: Piece[], position: Position): Piece | undefined {
-  return pieces.find(isOccupied(position));
+export function pieceOnSquare(board: Square[], position: Position): Piece | undefined {
+  const square = board.find(square => square.position[0] === position[0] && square.position[1] === position[1]);
+  if (square) {
+    return square.piece;
+  }
 }
 
 function isOccupied(position: Position) {
   return (piece: Piece) => !piece.isCaptured && samePosition(piece.position, position);
 }
 
-function kingSquares(pieces: Piece[], position: Position): Position[] {
+function kingSquares(board: Square[], position: Position): Position[] {
+  const pieces = getAllPieces(board);
   return [
     ...squaresInDirection(pieces, position, upMover, 1),
     ...squaresInDirection(pieces, position, rightMover, 1),
@@ -35,7 +39,8 @@ function kingSquares(pieces: Piece[], position: Position): Position[] {
   ];
 }
 
-function queenSquares(pieces: Piece[], position: Position): Position[] {
+function queenSquares(board: Square[], position: Position): Position[] {
+  const pieces = getAllPieces(board);
   return [
     ...squaresInDirection(pieces, position, upMover, 8),
     ...squaresInDirection(pieces, position, rightMover, 8),
@@ -48,7 +53,8 @@ function queenSquares(pieces: Piece[], position: Position): Position[] {
   ];
 }
 
-function rookSquares(pieces: Piece[], position: Position): Position[] {
+function rookSquares(board: Square[], position: Position): Position[] {
+  const pieces = getAllPieces(board);
   return [
     ...squaresInDirection(pieces, position, upMover, 8),
     ...squaresInDirection(pieces, position, rightMover, 8),
@@ -57,7 +63,8 @@ function rookSquares(pieces: Piece[], position: Position): Position[] {
   ];
 }
 
-function bishopSquares(pieces: Piece[], position: Position): Position[] {
+function bishopSquares(board: Square[], position: Position): Position[] {
+  const pieces = getAllPieces(board);
   return [
     ...squaresInDirection(pieces, position, upRightMover, 8),
     ...squaresInDirection(pieces, position, downRightMover, 8),
@@ -66,7 +73,8 @@ function bishopSquares(pieces: Piece[], position: Position): Position[] {
   ];
 }
 
-function knightSquares(pieces: Piece[], position: Position): Position[] {
+function knightSquares(board: Square[], position: Position): Position[] {
+  const pieces = getAllPieces(board);
   const [x, y] = position;
   const squares: Position[] = [];
   for (const [dx, dy] of [
@@ -91,7 +99,8 @@ function knightSquares(pieces: Piece[], position: Position): Position[] {
   return squares;
 }
 
-function pawnSquares(pieces: Piece[], position: Position, isWhite: boolean): Position[] {
+function pawnSquares(board: Square[], position: Position, isWhite: boolean): Position[] {
+  const pieces = getAllPieces(board);
   const startRank = isWhite ? 6 : 1;
   const moveLimit = position[1] === startRank ? 2 : 1;
   const mover = isWhite ? upMover : downMover;
@@ -109,6 +118,17 @@ function pawnSquares(pieces: Piece[], position: Position, isWhite: boolean): Pos
   }
 
   return squares;
+}
+
+export function getAllPieces(board: Square[]): Piece[] {
+  const pieces = [];
+  for (let i = 0; i < board.length; i++) {
+    const square = board[i];
+    if (square.piece) {
+      pieces.push(square.piece);
+    }
+  }
+  return pieces;
 }
 
 function squaresInDirection(

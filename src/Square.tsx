@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import makePlayerMove from "./App";
-import { Piece, PieceType, Position } from "./engine/state";
+import { Piece, PieceType, Position, Square } from "./engine/state";
 import WhiteKing from "./Pieces/king-white.svg";
 import BlackKing from "./Pieces/king-black.svg";
 import WhiteQueen from "./Pieces/queen-white.svg";
@@ -48,13 +48,25 @@ function getSvg(piece: Piece) {
     }
 }
 
-export const Square: React.FC<{ square: Position; onClick: () => void, piece: Piece | undefined }> = ({
+export const SquareComp: React.FC<{ square: Square | undefined; onClick: () => void, piece: Piece | undefined }> = ({
   square,
   onClick,
   piece,
 }) => {
+    let squareName = 'white-square';
+    if (square) {
+        if (square.isWhiteAttacking && square.isBlackAttacking) {
+            squareName = 'orange-square';
+        }
+        else if (square.isWhiteAttacking) {
+            squareName = 'red-square';
+        }
+        else if (square.isBlackAttacking) {
+            squareName = 'blue-square';
+        }
+    }
   return (
-    <div className="square" onClick={() => onClick()}>
+    <div className={squareName} onClick={() => onClick()}>
         { piece && <img src={getSvg(piece)} />}
     </div>
   );

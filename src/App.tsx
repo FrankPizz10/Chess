@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
 import { GameState, makeNewGame, Position } from "./engine/state";
-import { makeMove } from "./engine/makeMove";
-import { Square } from "./Square";
+import { makeMove, getSquareAtPosition } from "./engine/makeMove";
+import { SquareComp } from "./Square";
 import { pieceOnSquare } from "./engine/board";
 
 const boardArr = Array.from({ length: 64 }, (_, i) => i);
@@ -48,12 +48,13 @@ function App() {
       </div>
       <div className="chess-board">
         {boardArr.map((i) => {
-          const square = [i % 8, Math.floor(i / 8)] as Position;
-          const piece = pieceOnSquare(gameState.pieces, square);
+          const squarePos = [i % 8, Math.floor(i / 8)] as Position;
+          const square = gameState.board.find(getSquareAtPosition(squarePos));
+          const piece = pieceOnSquare(gameState.board, squarePos);
           return (
-            <Square
+            <SquareComp
               square={square}
-              onClick={() => onSquareClicked(square)}
+              onClick={() => onSquareClicked(squarePos)}
               piece={piece}
               key={i}
             />
@@ -65,3 +66,4 @@ function App() {
 }
 
 export default App;
+

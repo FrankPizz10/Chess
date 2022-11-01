@@ -1,10 +1,18 @@
 import { kStringMaxLength } from "buffer";
 import { getAutomaticTypeDirectiveNames } from "typescript";
 
+
 export type GameState = {
   whiteToMove: boolean;
-  pieces: Piece[];
   players: Player[];
+  board: Square[];
+}
+
+export type Square = {
+  position: Position;
+  piece: Piece | undefined;
+  isWhiteAttacking: boolean;
+  isBlackAttacking: boolean;
 }
 
 export type Position = [number, number];  // [x, y]
@@ -32,9 +40,10 @@ type Player = {
 }
 
 export function makeNewGame(): GameState{
+  const pieces: Piece[] = getStartingPieces();
   return {
     whiteToMove: true,
-    pieces: getStartingPieces(),
+    board: makeBoard(pieces),
     players: [
       {
         name: 'Frank',
@@ -46,6 +55,25 @@ export function makeNewGame(): GameState{
       }
     ]
   }
+}
+
+function makeBoard(pieces: Piece[]): Square[] {
+  const board: Square[] = [];
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      const position: Position = [x, y];
+      const piece = pieces.find((piece) => {
+        return piece.position[0] === x && piece.position[1] === y;
+      });
+      board.push({
+        position,
+        piece,
+        isWhiteAttacking: false,
+        isBlackAttacking: false,
+      });
+    }
+  }
+  return board;
 }
 
 function getStartingPieces(): Piece[] {
