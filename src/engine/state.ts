@@ -5,13 +5,10 @@ export type GameState = {
 }
 
 export type Square = {
-  position: Position;
   piece: Piece | undefined;
   isWhiteAttacking: boolean;
   isBlackAttacking: boolean;
 }
-
-export type Position = [number, number];  // [x, y]
 
 export type Piece = {
   isWhite: boolean;

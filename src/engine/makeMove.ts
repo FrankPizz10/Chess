@@ -33,22 +33,21 @@ function checkSquare(state: GameState, move: Move) {
 
 // Rewrite
 function isValidMove(state: GameState, move: Move): boolean {
-  // if move from has a piece
-  if (state.board.find(getSquareAtPosition(move.from))?.piece) {
-    // if move to is empty
-    if (!state.board.find(getSquareAtPosition(move.to))?.piece) {
-      // if piece is not a king
-      if (state.board.find(getSquareAtPosition(move.from))?.piece?.type !== PieceType.King) {
-        // if move to is in movable positions
-        if (movableSquares(state, move.from).find(samePosition(move.to))) {
-          return true;
-        }
-      }
-      else {
-        return isValidKingMove(state, move);
-      }
-    }
+  const pieceToMove = state.board.find(getSquareAtPosition(move.from))?.piece;
+  if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) return false;
+
+  const occupyingPiece = state.board.find(getSquareAtPosition(move.to))?.piece;
+  if (!occupyingPiece) return false;
+  if (occupyingPiece.isWhite === state.whiteToMove || occupyingPiece.type === PieceType.King) return false;
+
+  const movablePositions = movableSquares(state, move);
+  if (!movablePositions.includes(move.to)) return false;
+
+  if (pieceToMove.type === PieceType.King) {
+    return isValidKingMove(state, move);
   }
+
+  return true;
 }
 
 function isValidKingMove(state: GameState, move: Move) {

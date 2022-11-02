@@ -1,7 +1,7 @@
-import { PieceType, Position } from "./state";
+import { PieceType } from "./state";
 
 export type Move = {
-  from: Position;
-  to: Position;
+  from: number;
+  to: number;
   promotionPiece?: PieceType;
 }
