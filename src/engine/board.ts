@@ -26,6 +26,10 @@ function kingSquares(board: Square[], position: number, isWhite: boolean): numbe
     ...squaresInDirection(board, position, rightMover, 1, isWhite),
     ...squaresInDirection(board, position, downMover, 1, isWhite),
     ...squaresInDirection(board, position, leftMover, 1, isWhite),
+    ...squaresInDirection(board, position, upRightMover, 1, isWhite),
+    ...squaresInDirection(board, position, downRightMover, 1, isWhite),
+    ...squaresInDirection(board, position, upLeftMover, 1, isWhite),
+    ...squaresInDirection(board, position, downLeftMover, 1, isWhite),
   ];
 }
 
@@ -73,7 +77,12 @@ function knightSquares(board: Square[], position: number, isWhite: boolean): num
     +10,
   ]) {
     const pos = position + distance;
-    if (pos < 0 || pos > 63) {
+    if (pos < 0 || pos > 63 || 
+      (position % 8 == 1 && (distance == 6 || distance == -10)) ||
+      (position % 8 == 6 && (distance == -6 || distance == 10)) ||
+      (Math.floor(position / 8) == 1) && (distance == -15 || distance == -17) ||
+      (Math.floor(position / 8) == 6) && (distance == 15 || distance == 17))
+      {
       continue;
     }
     squares.push(pos);
