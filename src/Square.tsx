@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import makePlayerMove from "./App";
-import { Piece, PieceType, Position, Square } from "./engine/state";
+import { Piece, PieceType, Square } from "./engine/state";
 import WhiteKing from "./Pieces/king-white.svg";
 import BlackKing from "./Pieces/king-black.svg";
 import WhiteQueen from "./Pieces/queen-white.svg";

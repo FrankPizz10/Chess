@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import "./App.css";
-import { GameState, makeNewGame, Position } from "./engine/state";
-import { makeMove, getSquareAtPosition } from "./engine/makeMove";
+import { GameState, makeNewGame, } from "./engine/state";
+import { makeMove } from "./engine/makeMove";
 import { SquareComp } from "./Square";
-import { pieceOnSquare } from "./engine/board";
 
 const boardArr = Array.from({ length: 64 }, (_, i) => i);
 
 function App() {
   const [gameState, setGameState] = useState<GameState>(makeNewGame());
-  const [selectedSquare, setSelectedSquare] = useState<Position | null>(null);
+  const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
 
   const logState = () => {
     console.log(gameState);
   };
 
-  const makePlayerMove = (square1: Position, square2: Position) => {
+  const makePlayerMove = (square1: number, square2: number) => {
     try {
       const newGameState = makeMove(gameState, {
         from: square1,
@@ -27,14 +26,14 @@ function App() {
     }
   };
 
-  const onSquareClicked = (square: Position) => {
+  const onSquareClicked = (position: number) => {
     if (selectedSquare !== null) {
-      if (selectedSquare !== square) {
-        makePlayerMove(selectedSquare, square);
+      if (selectedSquare !== position) {
+        makePlayerMove(selectedSquare, position);
       }
       setSelectedSquare(null);
     } else {
-      setSelectedSquare(square);
+      setSelectedSquare(position);
     }
   };
 
@@ -48,14 +47,12 @@ function App() {
       </div>
       <div className="chess-board">
         {boardArr.map((i) => {
-          const squarePos = [i % 8, Math.floor(i / 8)] as Position;
-          const square = gameState.board.find(getSquareAtPosition(squarePos));
-          const piece = pieceOnSquare(gameState.board, squarePos);
+          const square = gameState.board[i];
           return (
             <SquareComp
               square={square}
-              onClick={() => onSquareClicked(squarePos)}
-              piece={piece}
+              onClick={() => onSquareClicked(i)}
+              piece={square.piece}
               key={i}
             />
           );

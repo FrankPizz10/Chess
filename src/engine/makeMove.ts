@@ -1,20 +1,19 @@
-import { getAllPieces, movableSquares } from "./board";
+import { movableSquares } from "./board";
 import { Move } from "./move";
-import { GameState, PieceType, Position, Piece, Square } from "./state";
-import { getSquareAtPosition } from "./util";
+import { GameState, PieceType, Piece, Square } from "./state";
 
 export function makeMove(state: GameState, move: Move): GameState {
   if (isValidMove(state, move)) {
     const newState = {...state};
-    const piece = state.board.find(getSquareAtPosition(move.from))?.piece;
+    const piece = state.board[move.from]?.piece;
     if (piece) {
-      newState.whiteToMove = !newState.whiteToMove;
-      const fromSquare = state.board.find(getSquareAtPosition(move.from));
-      const toSquare = state.board.find(getSquareAtPosition(move.to));
+      const fromSquare = newState.board[move.from];
+      const toSquare = newState.board[move.to];
       if (fromSquare && toSquare) {
         fromSquare.piece = undefined;
         toSquare.piece = piece;
         updateAllSquaresUnderAttack(state);
+        newState.whiteToMove = !newState.whiteToMove;
       }
     }
     return newState;
@@ -24,23 +23,15 @@ export function makeMove(state: GameState, move: Move): GameState {
   }
 }
 
-function checkSquare(state: GameState, move: Move) {
-  return (piece: Piece) => 
-    piece.position[0] === move.from[0] 
-    && piece.position[1] === move.from[1]
-    && state.whiteToMove === piece.isWhite;
-}
-
 // Rewrite
 function isValidMove(state: GameState, move: Move): boolean {
-  const pieceToMove = state.board.find(getSquareAtPosition(move.from))?.piece;
+  const pieceToMove = state.board[move.from]?.piece;
   if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) return false;
+  
+  const occupyingPiece = state.board[move.to]?.piece;
+  if (occupyingPiece && (occupyingPiece.isWhite === state.whiteToMove || occupyingPiece.type === PieceType.King)) return false;
 
-  const occupyingPiece = state.board.find(getSquareAtPosition(move.to))?.piece;
-  if (!occupyingPiece) return false;
-  if (occupyingPiece.isWhite === state.whiteToMove || occupyingPiece.type === PieceType.King) return false;
-
-  const movablePositions = movableSquares(state, move);
+  const movablePositions = movableSquares(state, move.from);
   if (!movablePositions.includes(move.to)) return false;
 
   if (pieceToMove.type === PieceType.King) {
@@ -55,22 +46,19 @@ function isValidKingMove(state: GameState, move: Move) {
 }
 
 // Rewrite
-function updateAllSquaresUnderAttack(state: GameState, pieces: Piece[]) {
-  for (const piece of pieces) {
-    const movablePositions = movableSquares(state, piece.type, piece.position);
-    const squaresUnderAttack: Square[] = [];
-    for (const pos of movablePositions){
-      const square = state.board.find(getSquareAtPosition(pos));
-      if (square) {
-        squaresUnderAttack.push(square);
-      }
-    }
-    for (const sq of squaresUnderAttack) {
-      if (piece.isWhite) {
-        sq.isWhiteAttacking = true;
-      }
-      else {
-        sq.isBlackAttacking = true;
+function updateAllSquaresUnderAttack(state: GameState) {
+  for (let i = 0; i < 64; i++) {
+    const square = state.board[i];
+    if (square.piece) {
+      const movablePositions = movableSquares(state, i);
+      console.log("I am a " + square.piece.isWhite + " " + square.piece.type + " and I can move to " + movablePositions);
+      for (const pos of movablePositions) {
+        if (square.piece.isWhite) {
+          state.board[pos].isWhiteAttacking = true;
+        }
+        else {
+          state.board[pos].isBlackAttacking = true;
+        }
       }
     }
   }

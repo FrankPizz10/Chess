@@ -1,22 +1,21 @@
 import { Move } from "./move";
-import { GameState, Piece, PieceType, Square } from "./state";
-import { getSquareAtPosition, samePosition } from "./util";
+import { GameState, PieceType, Square } from "./state";
 
-export function movableSquares(state: GameState, move: Move): number[] {
-  const piece = state.board.find(getSquareAtPosition(move.from))?.piece;
+export function movableSquares(state: GameState, startSq: number): number[] {
+  const piece = state.board[startSq]?.piece;
   switch (piece?.type) {
     case PieceType.King:
-      return kingSquares(state.board, move.from);
+      return kingSquares(state.board, startSq, state.whiteToMove);
     case PieceType.Queen:
-      return queenSquares(state.board, move.from);
+      return queenSquares(state.board, startSq, state.whiteToMove);
     case PieceType.Rook:
-      return rookSquares(state.board, move.from);
+      return rookSquares(state.board, startSq, state.whiteToMove);
     case PieceType.Bishop:
-      return bishopSquares(state.board, move.from);
+      return bishopSquares(state.board, startSq, state.whiteToMove);
     case PieceType.Knight:
-      return knightSquares(state.board, move.from);
+      return knightSquares(state.board, startSq, state.whiteToMove);
     case PieceType.Pawn:
-      return pawnSquares(state.board, move.from, state.whiteToMove);
+      return pawnSquares(state.board, startSq, state.whiteToMove);
   }
   return [];
 }
@@ -32,32 +31,32 @@ function kingSquares(board: Square[], position: number, isWhite: boolean): numbe
 
 function queenSquares(board: Square[], position: number, isWhite: boolean): number[] {
   return [
-    ...squaresInDirection(board, position, upMover, 8),
-    ...squaresInDirection(board, position, rightMover, 8),
-    ...squaresInDirection(board, position, downMover, 8),
-    ...squaresInDirection(board, position, leftMover, 8),
-    ...squaresInDirection(board, position, upRightMover, 8),
-    ...squaresInDirection(board, position, downRightMover, 8),
-    ...squaresInDirection(board, position, upLeftMover, 8),
-    ...squaresInDirection(board, position, downLeftMover, 8),
+    ...squaresInDirection(board, position, upMover, 8, isWhite),
+    ...squaresInDirection(board, position, rightMover, 8, isWhite),
+    ...squaresInDirection(board, position, downMover, 8, isWhite),
+    ...squaresInDirection(board, position, leftMover, 8, isWhite),
+    ...squaresInDirection(board, position, upRightMover, 8, isWhite),
+    ...squaresInDirection(board, position, downRightMover, 8, isWhite),
+    ...squaresInDirection(board, position, upLeftMover, 8, isWhite),
+    ...squaresInDirection(board, position, downLeftMover, 8, isWhite),
   ];
 }
 
 function rookSquares(board: Square[], position: number, isWhite: boolean): number[] {
   return [
-    ...squaresInDirection(board, position, upMover, 8),
-    ...squaresInDirection(board, position, rightMover, 8),
-    ...squaresInDirection(board, position, downMover, 8),
-    ...squaresInDirection(board, position, leftMover, 8),
+    ...squaresInDirection(board, position, upMover, 8, isWhite),
+    ...squaresInDirection(board, position, rightMover, 8, isWhite),
+    ...squaresInDirection(board, position, downMover, 8, isWhite),
+    ...squaresInDirection(board, position, leftMover, 8, isWhite),
   ];
 }
 
 function bishopSquares(board: Square[], position: number, isWhite: boolean): number[] {
   return [
-    ...squaresInDirection(board, position, upRightMover, 8),
-    ...squaresInDirection(board, position, downRightMover, 8),
-    ...squaresInDirection(board, position, upLeftMover, 8),
-    ...squaresInDirection(board, position, downLeftMover, 8),
+    ...squaresInDirection(board, position, upRightMover, 8, isWhite),
+    ...squaresInDirection(board, position, downRightMover, 8, isWhite),
+    ...squaresInDirection(board, position, upLeftMover, 8, isWhite),
+    ...squaresInDirection(board, position, downLeftMover, 8, isWhite),
   ];
 }
 
