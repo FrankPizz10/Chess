@@ -1,6 +1,6 @@
-import { movableSquares } from "./board";
+import { attackingSquares } from "./board";
 import { Move } from "./move";
-import { GameState, PieceType, Piece, Square } from "./state";
+import { GameState, PieceType } from "./state";
 
 export function makeMove(state: GameState, move: Move): GameState {
   if (isValidMove(state, move)) {
@@ -31,34 +31,33 @@ function isValidMove(state: GameState, move: Move): boolean {
   const occupyingPiece = state.board[move.to]?.piece;
   if (occupyingPiece && (occupyingPiece.isWhite === state.whiteToMove || occupyingPiece.type === PieceType.King)) return false;
 
-  const movablePositions = movableSquares(state, move.from);
+  const movablePositions = attackingSquares(state, move.from, state.whiteToMove, occupyingPiece ? "attack" : "move");
   if (!movablePositions.includes(move.to)) return false;
 
-  if (pieceToMove.type === PieceType.King) {
-    return isValidKingMove(state, move);
-  }
-
-  return true;
-}
-
-function isValidKingMove(state: GameState, move: Move) {
   return true;
 }
 
 // Rewrite
 function updateAllSquaresUnderAttack(state: GameState) {
+  state.board.forEach((pos) => {
+    pos.isWhiteAttacking = false;
+    pos.isBlackAttacking = false;
+  });
   for (let i = 0; i < 64; i++) {
     const square = state.board[i];
     if (square.piece) {
-      const movablePositions = movableSquares(state, i);
-      console.log("I am a " + square.piece.isWhite + " " + square.piece.type + " and I can move to " + movablePositions);
-      for (const pos of movablePositions) {
-        if (square.piece.isWhite) {
-          state.board[pos].isWhiteAttacking = true;
-        }
-        else {
-          state.board[pos].isBlackAttacking = true;
-        }
+      if (square.piece.isWhite) {
+        const movablePositions = attackingSquares(state, i, true, "attack");
+        console.log("white", square.piece.type, movablePositions);
+        movablePositions.forEach((position) => {
+          state.board[position].isWhiteAttacking = true;
+        });
+      } else {
+        const movablePositions = attackingSquares(state, i, false, "attack");
+        console.log("black", square.piece.type, movablePositions);
+        movablePositions.forEach((position) => {
+          state.board[position].isBlackAttacking = true;
+        });
       }
     }
   }

@@ -1,112 +1,102 @@
-import { Move } from "./move";
 import { GameState, PieceType, Square } from "./state";
 
-export function movableSquares(state: GameState, startSq: number): number[] {
+export type MoveMode = "move" | "attack" | "check";
+
+export function attackingSquares(state: GameState, startSq: number, isWhite: boolean, mode: MoveMode): number[] {
   const piece = state.board[startSq]?.piece;
   switch (piece?.type) {
     case PieceType.King:
-      return kingSquares(state.board, startSq, state.whiteToMove);
+      return kingSquares(state.board, startSq, isWhite, mode);
     case PieceType.Queen:
-      return queenSquares(state.board, startSq, state.whiteToMove);
+      return queenSquares(state.board, startSq, isWhite, mode);
     case PieceType.Rook:
-      return rookSquares(state.board, startSq, state.whiteToMove);
+      return rookSquares(state.board, startSq, isWhite, mode);
     case PieceType.Bishop:
-      return bishopSquares(state.board, startSq, state.whiteToMove);
+      return bishopSquares(state.board, startSq, isWhite, mode);
     case PieceType.Knight:
-      return knightSquares(state.board, startSq, state.whiteToMove);
+      return knightSquares(state.board, startSq, isWhite, mode);
     case PieceType.Pawn:
-      return pawnSquares(state.board, startSq, state.whiteToMove);
+      return pawnSquares(state.board, startSq, isWhite, mode);
   }
   return [];
 }
 
-function kingSquares(board: Square[], position: number, isWhite: boolean): number[] {
+function kingSquares(board: Square[], position: number, isWhite: boolean, mode: MoveMode): number[] {
   return [
-    ...squaresInDirection(board, position, upMover, 1, isWhite),
-    ...squaresInDirection(board, position, rightMover, 1, isWhite),
-    ...squaresInDirection(board, position, downMover, 1, isWhite),
-    ...squaresInDirection(board, position, leftMover, 1, isWhite),
-    ...squaresInDirection(board, position, upRightMover, 1, isWhite),
-    ...squaresInDirection(board, position, downRightMover, 1, isWhite),
-    ...squaresInDirection(board, position, upLeftMover, 1, isWhite),
-    ...squaresInDirection(board, position, downLeftMover, 1, isWhite),
+    ...squaresInDirection(board, position, upMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, rightMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, downMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, leftMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, upRightMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, downRightMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, upLeftMover, 1, isWhite, mode),
+    ...squaresInDirection(board, position, downLeftMover, 1, isWhite, mode),
+  ].filter((pos) => {
+    return isWhite ? !board[pos].isBlackAttacking : !board[pos].isWhiteAttacking;
+  });
+}
+
+function queenSquares(board: Square[], position: number, isWhite: boolean, mode: MoveMode): number[] {
+  return [
+    ...squaresInDirection(board, position, upMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, rightMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, downMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, leftMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, upRightMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, downRightMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, upLeftMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, downLeftMover, 8, isWhite, mode),
   ];
 }
 
-function queenSquares(board: Square[], position: number, isWhite: boolean): number[] {
+function rookSquares(board: Square[], position: number, isWhite: boolean, mode: MoveMode): number[] {
   return [
-    ...squaresInDirection(board, position, upMover, 8, isWhite),
-    ...squaresInDirection(board, position, rightMover, 8, isWhite),
-    ...squaresInDirection(board, position, downMover, 8, isWhite),
-    ...squaresInDirection(board, position, leftMover, 8, isWhite),
-    ...squaresInDirection(board, position, upRightMover, 8, isWhite),
-    ...squaresInDirection(board, position, downRightMover, 8, isWhite),
-    ...squaresInDirection(board, position, upLeftMover, 8, isWhite),
-    ...squaresInDirection(board, position, downLeftMover, 8, isWhite),
+    ...squaresInDirection(board, position, upMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, rightMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, downMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, leftMover, 8, isWhite, mode),
   ];
 }
 
-function rookSquares(board: Square[], position: number, isWhite: boolean): number[] {
+function bishopSquares(board: Square[], position: number, isWhite: boolean, mode: MoveMode): number[] {
   return [
-    ...squaresInDirection(board, position, upMover, 8, isWhite),
-    ...squaresInDirection(board, position, rightMover, 8, isWhite),
-    ...squaresInDirection(board, position, downMover, 8, isWhite),
-    ...squaresInDirection(board, position, leftMover, 8, isWhite),
+    ...squaresInDirection(board, position, upRightMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, downRightMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, upLeftMover, 8, isWhite, mode),
+    ...squaresInDirection(board, position, downLeftMover, 8, isWhite, mode),
   ];
 }
 
-function bishopSquares(board: Square[], position: number, isWhite: boolean): number[] {
+function knightSquares(board: Square[], position: number, isWhite: boolean, mode: MoveMode): number[] {
   return [
-    ...squaresInDirection(board, position, upRightMover, 8, isWhite),
-    ...squaresInDirection(board, position, downRightMover, 8, isWhite),
-    ...squaresInDirection(board, position, upLeftMover, 8, isWhite),
-    ...squaresInDirection(board, position, downLeftMover, 8, isWhite),
-  ];
+    chainMovers(upMover, upMover, leftMover)(position),
+    chainMovers(upMover, upMover, rightMover)(position),
+    chainMovers(upMover, rightMover, rightMover)(position),
+    chainMovers(upMover, leftMover, leftMover)(position),
+    chainMovers(downMover, downMover, leftMover)(position),
+    chainMovers(downMover, downMover, rightMover)(position),
+    chainMovers(downMover, rightMover, rightMover)(position),
+    chainMovers(downMover, leftMover, leftMover)(position),
+  ].filter(
+    (i) => i >= 0 && i < 64
+  )
 }
 
-function knightSquares(board: Square[], position: number, isWhite: boolean): number[] {
+function pawnSquares(board: Square[], position: number, isWhite: boolean, mode: MoveMode): number[] {
   const squares: number[] = [];
-  for (const distance of [
-    -17,
-    -15,
-    -6,
-    -10,
-    +17,
-    +15,
-    +6,
-    +10,
-  ]) {
-    const pos = position + distance;
-    if (pos < 0 || pos > 63 || 
-      (position % 8 == 1 && (distance == 6 || distance == -10)) ||
-      (position % 8 == 6 && (distance == -6 || distance == 10)) ||
-      (Math.floor(position / 8) == 1) && (distance == -15 || distance == -17) ||
-      (Math.floor(position / 8) == 6) && (distance == 15 || distance == 17))
-      {
-      continue;
-    }
-    squares.push(pos);
+  if (mode === "move") {
+    const startRank: [number, number] = isWhite ? [48, 55] : [8, 15];
+    const moveLimit = position >= startRank[0] && position <= startRank[1] ? 2 : 1;
+    const mover = isWhite ? upMover : downMover;
+    squares.push(...squaresInDirection(board, position, mover, moveLimit, isWhite, mode));
   }
-  return squares;
-}
-
-function pawnSquares(board: Square[], position: number, isWhite: boolean): number[] {
-  const startRank: [number, number] = isWhite ? [48, 55] : [8, 15];
-  const moveLimit = position >= startRank[0] && position <= startRank[1] ? 2 : 1;
-  const mover = isWhite ? upMover : downMover;
-  const squares = squaresInDirection(board, position, mover, moveLimit, isWhite);
-  
-  const upRight = isWhite ? upRightMover : downLeftMover;
-  const upLeft = isWhite ? upLeftMover : downRightMover;
-  const upRightPos = upRight(position);
-  const upLeftPos = upLeft(position);
-  for (const pos of [upRightPos, upLeftPos]) {
-    const piece = board[pos]?.piece;
-    if (piece && piece.isWhite !== isWhite) {
-      squares.push(pos);
-    }
+  if (mode === "attack" || mode === "check") {
+    const upRight = isWhite ? upRightMover : downLeftMover;
+    const upLeft = isWhite ? upLeftMover : downRightMover;
+    const upRightPos = upRight(position);
+    const upLeftPos = upLeft(position);
+    squares.push(...[upRightPos, upLeftPos].filter((i) => i >= 0 && i < 64));
   }
-
   return squares;
 }
 
@@ -116,12 +106,14 @@ function squaresInDirection(
   mover: (i: number) => number,
   numSquares: number,
   isWhite: boolean,
+  mode: MoveMode,
 ): number[] {
   const squares: number[] = [];
   let numSquaresMoved = 0;
   while (true) {
     position = mover(position);
     if (
+      position === -1 || 
       position > 63 ||
       position < 0 ||
       numSquaresMoved >= numSquares
@@ -130,8 +122,9 @@ function squaresInDirection(
     }
     const piece = board[position]?.piece;
     if (piece) {
-      if (piece.isWhite !== isWhite) squares.push(position);
-      break;
+      squares.push(position);
+      const seeThroughKing = mode === "check" && piece.type === PieceType.King && piece.isWhite !== isWhite;
+      if (!seeThroughKing) break;
     }
     squares.push(position);
     numSquaresMoved++;
@@ -139,11 +132,22 @@ function squaresInDirection(
   return squares;
 }
 
+function chainMovers(...movers: ((i: number) => number)[]): (i: number) => number {
+  return (i: number) => {
+    for (const mover of movers) {
+      i = mover(i);
+      if (i === -1) return -1;
+    }
+    return i;
+  };
+}
+
 function upMover(i: number): number {
   return i - 8;
 }
 
 function rightMover(i: number): number {
+  if (i % 8 === 7) return -1;
   return i + 1;
 }
 
@@ -152,21 +156,26 @@ function downMover(i: number): number {
 }
 
 function leftMover(i: number): number {
+  if (i % 8 === 0) return -1;
   return i - 1;
 }
 
 function upRightMover(i: number): number {
+  if (i % 8 === 7) return -1;
   return i - 7;
 }
 
 function downRightMover(i: number): number {
+  if (i % 8 === 7) return -1;
   return i + 9;
 }
 
 function upLeftMover(i: number): number {
+  if (i % 8 === 0) return -1;
   return i - 9;
 }
 
 function downLeftMover(i: number): number {
+  if (i % 8 === 0) return -1;
   return i + 7;
 }
