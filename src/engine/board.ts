@@ -1,22 +1,22 @@
-import { GameState, PieceType, Square } from "./state";
+import { PieceType, Square } from "./state";
 
 export type MoveMode = "move" | "attack" | "check";
 
-export function attackingSquares(state: GameState, startSq: number, isWhite: boolean, mode: MoveMode): number[] {
-  const piece = state.board[startSq]?.piece;
+export function attackingSquares(board: Square[], startSq: number, isWhite: boolean, mode: MoveMode): number[] {
+  const piece = board[startSq]?.piece;
   switch (piece?.type) {
     case PieceType.King:
-      return kingSquares(state.board, startSq, isWhite, mode);
+      return kingSquares(board, startSq, isWhite, mode);
     case PieceType.Queen:
-      return queenSquares(state.board, startSq, isWhite, mode);
+      return queenSquares(board, startSq, isWhite, mode);
     case PieceType.Rook:
-      return rookSquares(state.board, startSq, isWhite, mode);
+      return rookSquares(board, startSq, isWhite, mode);
     case PieceType.Bishop:
-      return bishopSquares(state.board, startSq, isWhite, mode);
+      return bishopSquares(board, startSq, isWhite, mode);
     case PieceType.Knight:
-      return knightSquares(state.board, startSq, isWhite, mode);
+      return knightSquares(board, startSq, isWhite, mode);
     case PieceType.Pawn:
-      return pawnSquares(state.board, startSq, isWhite, mode);
+      return pawnSquares(board, startSq, isWhite, mode);
   }
   return [];
 }
