@@ -8,6 +8,8 @@ export type Square = {
   piece: Piece | undefined;
   isWhiteAttacking: boolean;
   isBlackAttacking: boolean;
+  canWhiteMoveTo: boolean;
+  canBlackMoveTo: boolean;
 }
 
 export type Piece = {
@@ -54,6 +56,8 @@ function makeBoard(): Square[] {
       piece: makePiece(i),
       isWhiteAttacking: false,
       isBlackAttacking: false,
+      canWhiteMoveTo: false,
+      canBlackMoveTo: false,
     });
   }
   return board;
