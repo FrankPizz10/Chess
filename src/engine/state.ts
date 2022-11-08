@@ -52,10 +52,8 @@ function makeBoard(): Square[] {
   for (let i = 0; i < 64; i++) {
     board.push({
       piece: makePiece(i),
-      isWhiteAttacking: false,
-      isBlackAttacking: false,
-      canWhiteMoveTo: false,
-      canBlackMoveTo: false,
+      attackingPieces: [],
+      movablePieces: [],
     });
   }
   return board;

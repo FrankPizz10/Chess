@@ -1,234 +1,234 @@
-import { GameState, Piece, PieceType, Position } from "./state";
-import { movableSquares } from "./board";
-import { samePosition } from "./util";
+// import { GameState, Piece, PieceType, Position } from "./state";
+// import { movableSquares } from "./board";
+// import { samePosition } from "./util";
 
-function isGameOver(state: GameState): boolean {
-  return (kingInCheck(state) && noValidMovesOutOfCheck(state))!;
-}
+// function isGameOver(state: GameState): boolean {
+//   return (kingInCheck(state) && noValidMovesOutOfCheck(state))!;
+// }
 
-function getWinner(state: GameState): string {
-  // who won?
-  return "Not Implemented";
-}
+// function getWinner(state: GameState): string {
+//   // who won?
+//   return "Not Implemented";
+// }
 
-function getCurrentPlayersKing(state: GameState): Piece {
-  return state.pieces.find(
-    (piece) =>
-      matchPieceType(PieceType.King)(piece) &&
-      isPieceWhite(piece) === state.whiteToMove
-  )!;
-}
+// function getCurrentPlayersKing(state: GameState): Piece {
+//   return state.pieces.find(
+//     (piece) =>
+//       matchPieceType(PieceType.King)(piece) &&
+//       isPieceWhite(piece) === state.whiteToMove
+//   )!;
+// }
 
-function getSquaresUnderAttack(state: GameState): Position[] {
-  const opponentPieces = state.pieces.filter(
-    (piece) => piece.isWhite !== state.whiteToMove
-  );
-  const squaresUnderAttack = opponentPieces.flatMap((piece) =>
-    movableSquares(state, piece.type, piece.position)
-  );
-  return squaresUnderAttack;
-}
+// function getSquaresUnderAttack(state: GameState): Position[] {
+//   const opponentPieces = state.pieces.filter(
+//     (piece) => piece.isWhite !== state.whiteToMove
+//   );
+//   const squaresUnderAttack = opponentPieces.flatMap((piece) =>
+//     movableSquares(state, piece.type, piece.position)
+//   );
+//   return squaresUnderAttack;
+// }
 
-function matchPieceType(pieceType: PieceType): (piece: Piece) => boolean {
-  return (piece) => piece.type === pieceType;
-}
+// function matchPieceType(pieceType: PieceType): (piece: Piece) => boolean {
+//   return (piece) => piece.type === pieceType;
+// }
 
-function isPieceWhite(piece: Piece): boolean {
-  return piece.isWhite;
-}
+// function isPieceWhite(piece: Piece): boolean {
+//   return piece.isWhite;
+// }
 
-function kingInCheck(state: GameState): boolean {
-  const king = getCurrentPlayersKing(state);
-  const squaresUnderAttack = getSquaresUnderAttack(state);
-  return squaresUnderAttack.some(
-    (square) => samePosition(square, king.position)
-  );
-}
+// function kingInCheck(state: GameState): boolean {
+//   const king = getCurrentPlayersKing(state);
+//   const squaresUnderAttack = getSquaresUnderAttack(state);
+//   return squaresUnderAttack.some(
+//     (square) => samePosition(square, king.position)
+//   );
+// }
 
-function noValidMovesOutOfCheck(state: GameState) {
-  if (
-    kingHasNoValidSquare(state) &&
-    noPiecesCanBlockCheck(state) &&
-    noPiecesCanCaptureAttacker(state)
-  ) {
-    return true;
-  }
-}
+// function noValidMovesOutOfCheck(state: GameState) {
+//   if (
+//     kingHasNoValidSquare(state) &&
+//     noPiecesCanBlockCheck(state) &&
+//     noPiecesCanCaptureAttacker(state)
+//   ) {
+//     return true;
+//   }
+// }
 
-function kingHasNoValidSquare(state: GameState): boolean {
-  const king = getCurrentPlayersKing(state);
-  const squares = movableSquares(state, king.type, king.position);
-  return squares.length === 0;
-}
+// function kingHasNoValidSquare(state: GameState): boolean {
+//   const king = getCurrentPlayersKing(state);
+//   const squares = movableSquares(state, king.type, king.position);
+//   return squares.length === 0;
+// }
 
-function noPiecesCanBlockCheck(state: GameState): boolean {
-  const king = getCurrentPlayersKing(state);
-  const piecesAttackingKing = state.pieces.filter(
-    (piece) =>
-      piece.isWhite !== state.whiteToMove &&
-      movableSquares(state, piece.type, piece.position).some(
-        (square) => samePosition(square, king.position)
-      )
-  );
-  if (piecesAttackingKing.length > 1) {
-    return false;
-  } else {
-    const pieceAttackKing = piecesAttackingKing[0];
-    const currentPlayersPieces = state.pieces.filter(
-      (piece) => piece.isWhite === state.whiteToMove
-    );
-    const currentPlayersMovableSquares = currentPlayersPieces.flatMap((piece) =>
-      movableSquares(state, piece.type, piece.position)
-    );
-    const squaresBetweenKingAndAttacker = getSquaresBetweenKingAndAttacker(
-      king,
-      pieceAttackKing
-    );
-    return currentPlayersMovableSquares.some((validSquare) =>
-      squaresBetweenKingAndAttacker.includes(validSquare)
-    );
-  }
-}
+// function noPiecesCanBlockCheck(state: GameState): boolean {
+//   const king = getCurrentPlayersKing(state);
+//   const piecesAttackingKing = state.pieces.filter(
+//     (piece) =>
+//       piece.isWhite !== state.whiteToMove &&
+//       movableSquares(state, piece.type, piece.position).some(
+//         (square) => samePosition(square, king.position)
+//       )
+//   );
+//   if (piecesAttackingKing.length > 1) {
+//     return false;
+//   } else {
+//     const pieceAttackKing = piecesAttackingKing[0];
+//     const currentPlayersPieces = state.pieces.filter(
+//       (piece) => piece.isWhite === state.whiteToMove
+//     );
+//     const currentPlayersMovableSquares = currentPlayersPieces.flatMap((piece) =>
+//       movableSquares(state, piece.type, piece.position)
+//     );
+//     const squaresBetweenKingAndAttacker = getSquaresBetweenKingAndAttacker(
+//       king,
+//       pieceAttackKing
+//     );
+//     return currentPlayersMovableSquares.some((validSquare) =>
+//       squaresBetweenKingAndAttacker.includes(validSquare)
+//     );
+//   }
+// }
 
-function getSquaresBetweenKingAndAttacker(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  if (
-    king.position[0] === piecesAttackingKing.position[0] &&
-    king.position[1] !== piecesAttackingKing.position[1]
-  ) {
-    return getSquaresOnSameRank(king, piecesAttackingKing);
-  } else if (
-    king.position[1] === piecesAttackingKing.position[1] &&
-    king.position[0] !== piecesAttackingKing.position[0]
-  ) {
-    return getSquaresOnSameFile(king, piecesAttackingKing);
-  } else if (
-    Math.abs(king.position[0] - piecesAttackingKing.position[0]) ===
-    Math.abs(king.position[1] - piecesAttackingKing.position[1])
-  ) {
-    if (
-      king.position[0] < piecesAttackingKing.position[0] &&
-      king.position[1] > piecesAttackingKing.position[1]
-    ) {
-      return getSquaresTopRightDiagonal(king, piecesAttackingKing);
-    } else if (
-      king.position[0] < piecesAttackingKing.position[0] &&
-      king.position[1] < piecesAttackingKing.position[1]
-    ) {
-      return getSquaresBottomRightDiagonal(king, piecesAttackingKing);
-    } else if (
-      king.position[0] > piecesAttackingKing.position[0] &&
-      king.position[1] > piecesAttackingKing.position[1]
-    ) {
-      return getSquaresTopLeftDiagonal(king, piecesAttackingKing);
-    } else {
-      return getSquaresBottomLeftDiagonal(king, piecesAttackingKing);
-    }
-  } else {
-    return [];
-  }
-}
+// function getSquaresBetweenKingAndAttacker(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   if (
+//     king.position[0] === piecesAttackingKing.position[0] &&
+//     king.position[1] !== piecesAttackingKing.position[1]
+//   ) {
+//     return getSquaresOnSameRank(king, piecesAttackingKing);
+//   } else if (
+//     king.position[1] === piecesAttackingKing.position[1] &&
+//     king.position[0] !== piecesAttackingKing.position[0]
+//   ) {
+//     return getSquaresOnSameFile(king, piecesAttackingKing);
+//   } else if (
+//     Math.abs(king.position[0] - piecesAttackingKing.position[0]) ===
+//     Math.abs(king.position[1] - piecesAttackingKing.position[1])
+//   ) {
+//     if (
+//       king.position[0] < piecesAttackingKing.position[0] &&
+//       king.position[1] > piecesAttackingKing.position[1]
+//     ) {
+//       return getSquaresTopRightDiagonal(king, piecesAttackingKing);
+//     } else if (
+//       king.position[0] < piecesAttackingKing.position[0] &&
+//       king.position[1] < piecesAttackingKing.position[1]
+//     ) {
+//       return getSquaresBottomRightDiagonal(king, piecesAttackingKing);
+//     } else if (
+//       king.position[0] > piecesAttackingKing.position[0] &&
+//       king.position[1] > piecesAttackingKing.position[1]
+//     ) {
+//       return getSquaresTopLeftDiagonal(king, piecesAttackingKing);
+//     } else {
+//       return getSquaresBottomLeftDiagonal(king, piecesAttackingKing);
+//     }
+//   } else {
+//     return [];
+//   }
+// }
 
-function getSquaresOnSameRank(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  const squares: Position[] = [];
-  const start = Math.min(king.position[0], piecesAttackingKing.position[0]);
-  const end = Math.max(king.position[0], piecesAttackingKing.position[0]);
-  for (let i = start + 1; i < end; i++) {
-    squares.push([i, king.position[1]]);
-  }
-  return squares;
-}
+// function getSquaresOnSameRank(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   const squares: Position[] = [];
+//   const start = Math.min(king.position[0], piecesAttackingKing.position[0]);
+//   const end = Math.max(king.position[0], piecesAttackingKing.position[0]);
+//   for (let i = start + 1; i < end; i++) {
+//     squares.push([i, king.position[1]]);
+//   }
+//   return squares;
+// }
 
-function getSquaresOnSameFile(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  const squares: Position[] = [];
-  const start = Math.min(king.position[1], piecesAttackingKing.position[1]);
-  const end = Math.max(king.position[1], piecesAttackingKing.position[1]);
-  for (let i = start + 1; i < end; i++) {
-    squares.push([king.position[0], i]);
-  }
-  return squares;
-}
+// function getSquaresOnSameFile(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   const squares: Position[] = [];
+//   const start = Math.min(king.position[1], piecesAttackingKing.position[1]);
+//   const end = Math.max(king.position[1], piecesAttackingKing.position[1]);
+//   for (let i = start + 1; i < end; i++) {
+//     squares.push([king.position[0], i]);
+//   }
+//   return squares;
+// }
 
-function getSquaresTopRightDiagonal(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  const squares: Position[] = [];
-  let x = king.position[0] + 1;
-  let y = king.position[1] - 1;
-  while (
-    x < piecesAttackingKing.position[0] &&
-    y > piecesAttackingKing.position[1]
-  ) {
-    squares.push([x, y]);
-    x++;
-    y--;
-  }
-  return squares;
-}
+// function getSquaresTopRightDiagonal(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   const squares: Position[] = [];
+//   let x = king.position[0] + 1;
+//   let y = king.position[1] - 1;
+//   while (
+//     x < piecesAttackingKing.position[0] &&
+//     y > piecesAttackingKing.position[1]
+//   ) {
+//     squares.push([x, y]);
+//     x++;
+//     y--;
+//   }
+//   return squares;
+// }
 
-function getSquaresBottomRightDiagonal(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  const squares: Position[] = [];
-  let x = king.position[0] + 1;
-  let y = king.position[1] + 1;
-  while (
-    x < piecesAttackingKing.position[0] &&
-    y < piecesAttackingKing.position[1]
-  ) {
-    squares.push([x, y]);
-    x++;
-    y++;
-  }
-  return squares;
-}
+// function getSquaresBottomRightDiagonal(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   const squares: Position[] = [];
+//   let x = king.position[0] + 1;
+//   let y = king.position[1] + 1;
+//   while (
+//     x < piecesAttackingKing.position[0] &&
+//     y < piecesAttackingKing.position[1]
+//   ) {
+//     squares.push([x, y]);
+//     x++;
+//     y++;
+//   }
+//   return squares;
+// }
 
-function getSquaresTopLeftDiagonal(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  const squares: Position[] = [];
-  let x = king.position[0] - 1;
-  let y = king.position[1] - 1;
-  while (
-    x > piecesAttackingKing.position[0] &&
-    y > piecesAttackingKing.position[1]
-  ) {
-    squares.push([x, y]);
-    x--;
-    y--;
-  }
-  return squares;
-}
+// function getSquaresTopLeftDiagonal(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   const squares: Position[] = [];
+//   let x = king.position[0] - 1;
+//   let y = king.position[1] - 1;
+//   while (
+//     x > piecesAttackingKing.position[0] &&
+//     y > piecesAttackingKing.position[1]
+//   ) {
+//     squares.push([x, y]);
+//     x--;
+//     y--;
+//   }
+//   return squares;
+// }
 
-function getSquaresBottomLeftDiagonal(
-  king: Piece,
-  piecesAttackingKing: Piece
-): Position[] {
-  const squares: Position[] = [];
-  let x = king.position[0] - 1;
-  let y = king.position[1] + 1;
-  while (
-    x > piecesAttackingKing.position[0] &&
-    y < piecesAttackingKing.position[1]
-  ) {
-    squares.push([x, y]);
-    x--;
-    y++;
-  }
-  return squares;
-}
+// function getSquaresBottomLeftDiagonal(
+//   king: Piece,
+//   piecesAttackingKing: Piece
+// ): Position[] {
+//   const squares: Position[] = [];
+//   let x = king.position[0] - 1;
+//   let y = king.position[1] + 1;
+//   while (
+//     x > piecesAttackingKing.position[0] &&
+//     y < piecesAttackingKing.position[1]
+//   ) {
+//     squares.push([x, y]);
+//     x--;
+//     y++;
+//   }
+//   return squares;
+// }
 
-function noPiecesCanCaptureAttacker(state: GameState): boolean {
-  return false;
-}
+// function noPiecesCanCaptureAttacker(state: GameState): boolean {
+//   return false;
+// }
