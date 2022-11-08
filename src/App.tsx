@@ -22,7 +22,7 @@ function App() {
       });
       setGameState(newGameState);
     } catch (e) {
-      window.alert("Invalid Move");
+      window.alert(e);
     }
   };
 

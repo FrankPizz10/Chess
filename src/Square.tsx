@@ -54,17 +54,17 @@ export const SquareComp: React.FC<{ square: Square | undefined; onClick: () => v
   piece,
 }) => {
     let squareName = 'white-square';
-    if (square) {
-        if (square.isWhiteAttacking && square.isBlackAttacking) {
-            squareName = 'orange-square';
-        }
-        else if (square.isWhiteAttacking) {
-            squareName = 'red-square';
-        }
-        else if (square.isBlackAttacking) {
-            squareName = 'blue-square';
-        }
-    }
+    // if (square) {
+    //     if (square.isWhiteAttacking && square.isBlackAttacking) {
+    //         squareName = 'orange-square';
+    //     }
+    //     else if (square.isWhiteAttacking) {
+    //         squareName = 'red-square';
+    //     }
+    //     else if (square.isBlackAttacking) {
+    //         squareName = 'blue-square';
+    //     }
+    // }
   return (
     <div className={squareName} onClick={() => onClick()}>
         { piece && <img src={getSvg(piece)} />}

@@ -8,10 +8,6 @@ export function makeMove(state: GameState, move: Move): GameState {
     throw new Error("Invalid move");
   }
 
-  if (isGameOver(state)) {
-    throw new Error("Game is over");
-  }
-
   const piece = state.board[move.from].piece!;
 
   // move the piece
@@ -41,6 +37,13 @@ export function makeMove(state: GameState, move: Move): GameState {
   
   newState.whiteToMove = !newState.whiteToMove;
 
+  try {
+    isGameOver(newState)
+  }
+  catch (e) {
+    alert(e);
+  }
+
   return newState;
 }
 
@@ -54,19 +57,20 @@ function isValidMove(state: GameState, move: Move): boolean {
   const pieceToMove = state.board[move.from]?.piece;
   if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) return false;
   
+  console.log("checking occupying piece");
   const occupyingPiece = state.board[move.to]?.piece;
   if (occupyingPiece && (occupyingPiece.isWhite === state.whiteToMove || occupyingPiece.type === PieceType.King)) return false;
-
+  console.log("checking movable pieces");
   const movablePositions = attackingSquares(state.board, move.from, state.whiteToMove, occupyingPiece ? "attack" : "move");
   if (!movablePositions.includes(move.to)) return false;
-
+  console.log(movablePositions);
   return true;
 }
 
 function isGameOver(state: GameState): boolean {
   // checkmate
   if (isKingInCheckmate(state.board, state.whiteToMove)) {
-    return true;
+    throw new Error("Checkmate");
   }
 
   // stalemate

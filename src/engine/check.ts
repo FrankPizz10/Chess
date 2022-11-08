@@ -2,7 +2,7 @@ import { attackingSquares } from "./board";
 import { Piece, PieceType, Square } from "./state";
 
 export function isKingInCheckmate(board: Square[], whiteToMove: boolean): boolean {
-  if (!isKingInCheck) return false;
+  if (!isKingInCheck(board, whiteToMove)) return false;
   return (canKingMove(board, whiteToMove) || canPieceBlockCheck(board, whiteToMove) || canPieceCaptureAttacker(board, whiteToMove));
 }
 
