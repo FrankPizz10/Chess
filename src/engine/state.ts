@@ -6,10 +6,8 @@ export type GameState = {
 
 export type Square = {
   piece: Piece | undefined;
-  isWhiteAttacking: boolean;
-  isBlackAttacking: boolean;
-  canWhiteMoveTo: boolean;
-  canBlackMoveTo: boolean;
+  attackingPieces: Piece[];
+  movablePieces: Piece[];
 }
 
 export type Piece = {

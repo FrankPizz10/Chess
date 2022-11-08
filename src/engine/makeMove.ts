@@ -80,35 +80,25 @@ function isGameOver(state: GameState): boolean {
 
 // Rewrite
 function updateSquaresUnderAttack(board: Square[]): Square[] {
-  const newBoard = board.map((square) => {
+  const newBoard: Square[] = board.map((square) => {
     return {
       ...square,
-      isWhiteAttacking: false,
-      isBlackAttacking: false,
+      attackingPieces: [],
+      movablePieces: [],
     }
   });
   for (let i = 0; i < 64; i++) {
     const square = newBoard[i];
     if (square.piece) {
-      if (square.piece.isWhite) {
-        const attackingPositions = attackingSquares(board, i, true, "check");
-        attackingPositions.forEach((position) => {
-          newBoard[position].isWhiteAttacking = true;
-        });
-        const movablePositions = attackingSquares(board, i, true, "move");
-        movablePositions.forEach((position) => {
-          newBoard[position].canWhiteMoveTo = true;
-        });
-      } else {
-        const attackingPositions = attackingSquares(board, i, false, "check");
-        attackingPositions.forEach((position) => {
-          newBoard[position].isBlackAttacking = true;
-        });
-        const movablePositions = attackingSquares(board, i, false, "move");
-        movablePositions.forEach((position) => {
-          newBoard[position].canBlackMoveTo = true;
-        });
-      }
+      const attackingPositions = attackingSquares(board, i, true, "check");
+      attackingPositions.forEach((position) => {
+        newBoard[position].attackingPieces.push(square.piece!);
+      });
+
+      const movablePositions = attackingSquares(board, i, true, "move");
+      movablePositions.forEach((position) => {
+        newBoard[position].movablePieces.push(square.piece!);
+      });
     }
   }
   return newBoard;
