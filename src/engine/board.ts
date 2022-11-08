@@ -32,7 +32,7 @@ function kingSquares(board: Square[], position: number, isWhite: boolean, mode: 
     ...squaresInDirection(board, position, upLeftMover, 1, isWhite, mode),
     ...squaresInDirection(board, position, downLeftMover, 1, isWhite, mode),
   ].filter((pos) => {
-    return board[pos].attackingPieces.filter((piece) => piece.isWhite === isWhite).length === 0;
+    return board[pos].attackingPieces.filter((piece) => piece.isWhite !== isWhite).length === 0;
   });
 }
 

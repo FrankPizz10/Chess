@@ -57,13 +57,10 @@ function isValidMove(state: GameState, move: Move): boolean {
   const pieceToMove = state.board[move.from]?.piece;
   if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) return false;
   
-  console.log("checking occupying piece");
   const occupyingPiece = state.board[move.to]?.piece;
   if (occupyingPiece && (occupyingPiece.isWhite === state.whiteToMove || occupyingPiece.type === PieceType.King)) return false;
-  console.log("checking movable pieces");
   const movablePositions = attackingSquares(state.board, move.from, state.whiteToMove, occupyingPiece ? "attack" : "move");
   if (!movablePositions.includes(move.to)) return false;
-  console.log(movablePositions);
   return true;
 }
 

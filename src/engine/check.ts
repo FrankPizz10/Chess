@@ -3,6 +3,7 @@ import { Piece, PieceType, Square } from "./state";
 
 export function isKingInCheckmate(board: Square[], whiteToMove: boolean): boolean {
   if (!isKingInCheck(board, whiteToMove)) return false;
+  console.log("Check!");
   return (canKingMove(board, whiteToMove) || canPieceBlockCheck(board, whiteToMove) || canPieceCaptureAttacker(board, whiteToMove));
 }
 
@@ -16,7 +17,10 @@ export function isKingInCheck(board: Square[], whiteToMove: boolean): boolean {
 }
 
 function canKingMove(board: Square[], whiteToMove: boolean): boolean {
-  return attackingSquares(board, 0, whiteToMove, "move").length > 0;
+  const kingPosition = board.findIndex((square) => {
+    return square.piece && square.piece.type === PieceType.King && square.piece.isWhite === whiteToMove;
+  });
+  return attackingSquares(board, kingPosition, whiteToMove, "move").length < 1;
 }
 
 function canPieceBlockCheck(board: Square[], whiteToMove: boolean): boolean {
