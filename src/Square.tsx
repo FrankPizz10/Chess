@@ -48,23 +48,21 @@ function getSvg(piece: Piece) {
     }
 }
 
-export const SquareComp: React.FC<{ square: Square | undefined; onClick: () => void, piece: Piece | undefined }> = ({
+export const SquareComp: React.FC<{ square: Square | undefined; onClick: () => void, piece: Piece | undefined, index: number }> = ({
   square,
   onClick,
   piece,
+  index,
 }) => {
-    let squareName = 'white-square';
-    // if (square) {
-    //     if (square.isWhiteAttacking && square.isBlackAttacking) {
-    //         squareName = 'orange-square';
-    //     }
-    //     else if (square.isWhiteAttacking) {
-    //         squareName = 'red-square';
-    //     }
-    //     else if (square.isBlackAttacking) {
-    //         squareName = 'blue-square';
-    //     }
-    // }
+    let squareName = 'dark-square';
+    if (square) {
+        if ((Math.floor(index / 8) % 2 ==0) && (index % 2 === 0)) {
+            squareName = 'light-square';
+        }
+        else if ((Math.floor(index / 8) % 2 == 1) && (index % 2 === 1)) {
+            squareName = 'light-square';
+        }
+    }
   return (
     <div className={squareName} onClick={() => onClick()}>
         { piece && <img src={getSvg(piece)} />}

@@ -4,13 +4,20 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 20px;
   color: white;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
 }
 
 .chess-board {
@@ -21,7 +28,7 @@
   padding: 6px;
 }
 
-.white-square {
+.light-square {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 10px;
@@ -29,46 +36,20 @@
   text-align: center;
 }
 
-.white-square > img {
+.light-square > img {
   width: 50px;
   height: 50px;
 }
 
-.blue-square {
-  background-color: rgba(17, 35, 232, 0.8);
+.dark-square {
+  background-color: rgba(19, 139, 8, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 10px;
   font-size: 20px;
   text-align: center;
 }
 
-.blue-square > img {
-  width: 50px;
-  height: 50px;
-}
-
-.red-square {
-  background-color: rgba(230, 17, 17, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  font-size: 20px;
-  text-align: center;
-}
-
-.red-square > img {
-  width: 50px;
-  height: 50px;
-}
-
-.orange-square {
-  background-color: rgba(230, 184, 17, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  font-size: 20px;
-  text-align: center;
-}
-
-.orange-square > img {
+.dark-square > img {
   width: 50px;
   height: 50px;
 }

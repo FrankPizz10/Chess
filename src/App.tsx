@@ -42,9 +42,7 @@ function App() {
       <header className="App-header">
         <h1>Chess App</h1>
       </header>
-      <div className="Inputs">
-        <button onClick={logState}>Get Game State</button>
-      </div>
+      <div className="board-container">
       <div className="chess-board">
         {boardArr.map((i) => {
           const square = gameState.board[i];
@@ -54,9 +52,11 @@ function App() {
               onClick={() => onSquareClicked(i)}
               piece={square.piece}
               key={i}
+              index={i}
             />
           );
         })}
+      </div>
       </div>
     </div>
   );
