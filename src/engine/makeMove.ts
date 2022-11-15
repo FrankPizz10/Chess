@@ -115,17 +115,20 @@ function isGameOver(state: GameState): boolean {
 function isValidCastlingMove(state: GameState, move: Move): boolean {
   const curPlayer = state.players.find((player) => player.isWhite === state.whiteToMove)!;
   if (state.board[move.from].piece?.type !== PieceType.King) return false;
-  if (state.board[move.to].piece?.type !== PieceType.Rook) return false;
   if (move.from === 4 && move.to === 6 && curPlayer.canCastleKingSide) {
+    if (state.board[7].piece?.type !== PieceType.Rook) return false;
     return !castlingSquaresOccupiedOrUnderAttack(state, move);
   }
   if (move.from === 4 && move.to === 2 && curPlayer.canCastleQueenSide) {
+    if (state.board[0].piece?.type !== PieceType.Rook) return false;
     return !castlingSquaresOccupiedOrUnderAttack(state, move);
   }
   if (move.from === 60 && move.to === 62 && curPlayer.canCastleKingSide) {
+    if (state.board[63].piece?.type !== PieceType.Rook) return false;
     return !castlingSquaresOccupiedOrUnderAttack(state, move);
   }
   if (move.from === 60 && move.to === 58 && curPlayer.canCastleQueenSide) {
+    if (state.board[56].piece?.type !== PieceType.Rook) return false;
     return !castlingSquaresOccupiedOrUnderAttack(state, move);
   }
   return false;
