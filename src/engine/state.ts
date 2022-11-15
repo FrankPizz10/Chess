@@ -27,6 +27,8 @@ export enum PieceType {
 type Player = {
   name: string;
   isWhite: boolean;
+  canCastleKingSide: boolean;
+  canCastleQueenSide: boolean;
 }
 
 export function makeNewGame(): GameState{
@@ -37,10 +39,14 @@ export function makeNewGame(): GameState{
       {
         name: 'Frank',
         isWhite: true,
+        canCastleKingSide: true,
+        canCastleQueenSide: true,
       },
       {
         name: 'Bill',
         isWhite: false,
+        canCastleKingSide: true,
+        canCastleQueenSide: true,
       }
     ]
   }

@@ -9,9 +9,14 @@ export function makeMove(state: GameState, move: Move): GameState {
   }
 
   const piece = state.board[move.from].piece!;
+  let newState = {...state};
+
+  if (piece.type === PieceType.King && Math.abs(move.from - move.to) === 2) {
+    newState = makeCastlingMove(state, move);
+  }
 
   // move the piece
-  let newState = {
+  newState = {
     ...state,
     board: updateSquaresUnderAttack(state.board.map((square, index) => {
       if (index === move.from) {
@@ -29,10 +34,34 @@ export function makeMove(state: GameState, move: Move): GameState {
       return square;
     })),
   }
-
+  
+  // TODO: en passant
+  // TODO: pawn promotion
+  // TODO: cannot castle out of check
+  
   // check if the king is in check
   if (isKingInCheck(newState.board, newState.whiteToMove)) {
     throw new Error("Invalid move - puts king in check");
+  }
+
+  const curPlayer = newState.players.find((player) => player.isWhite === newState.whiteToMove)!;
+  if (piece.type === PieceType.King) {
+    curPlayer.canCastleKingSide = false;
+    curPlayer.canCastleQueenSide = false;
+  }
+  if (piece.type === PieceType.Rook) {
+    if (move.from === 0) {
+      curPlayer.canCastleQueenSide = false;
+    }
+    if (move.from === 7) {
+      curPlayer.canCastleKingSide = false;
+    }
+    if (move.from === 56) {
+      curPlayer.canCastleQueenSide = false;
+    }
+    if (move.from === 63) {
+      curPlayer.canCastleKingSide = false;
+    }
   }
   
   newState.whiteToMove = !newState.whiteToMove;
@@ -55,6 +84,10 @@ export function makeMove(state: GameState, move: Move): GameState {
  */
 function isValidMove(state: GameState, move: Move): boolean {
   const pieceToMove = state.board[move.from]?.piece;
+  // Check if move is castling
+  if (pieceToMove?.type === PieceType.King && Math.abs(move.from - move.to) === 2) {
+    return isValidCastlingMove(state, move);
+  }
   if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) return false;
   
   const occupyingPiece = state.board[move.to]?.piece;
@@ -79,7 +112,78 @@ function isGameOver(state: GameState): boolean {
   return false;
 }
 
-// Rewrite
+function isValidCastlingMove(state: GameState, move: Move): boolean {
+  const curPlayer = state.players.find((player) => player.isWhite === state.whiteToMove)!;
+  if (move.from === 4 && move.to === 6 && curPlayer.canCastleKingSide) {
+    return !castlingSquaresOccupiedOrUnderAttack(state, move);
+  }
+  if (move.from === 4 && move.to === 2 && curPlayer.canCastleQueenSide) {
+    return !castlingSquaresOccupiedOrUnderAttack(state, move);
+  }
+  if (move.from === 60 && move.to === 62 && curPlayer.canCastleKingSide) {
+    return !castlingSquaresOccupiedOrUnderAttack(state, move);
+  }
+  if (move.from === 60 && move.to === 58 && curPlayer.canCastleQueenSide) {
+    return !castlingSquaresOccupiedOrUnderAttack(state, move);
+  }
+  return false;
+} 
+
+function castlingSquaresOccupiedOrUnderAttack(state: GameState, move: Move): boolean {
+  if (move.from === 4 && move.to === 6) {
+    for (let i = 5; i <= 6; i++) {
+      if (state.board[i].piece) return true;
+        const opponentAttackers = state.board[i].attackingPieces.filter((piece) => piece.isWhite !== state.whiteToMove);
+        if (opponentAttackers.length > 0) return true;
+    }
+  }
+  if (move.from === 4 && move.to === 2) {
+    for (let i = 1; i <= 3; i++) {
+      if (state.board[i].piece) return true;
+        const opponentAttackers = state.board[i].attackingPieces.filter((piece) => piece.isWhite !== state.whiteToMove);
+        if (opponentAttackers.length > 0) return true;
+    }
+  }
+  if (move.from === 60 && move.to === 62) {
+    for (let i = 61; i <= 62; i++) {
+      if (state.board[i].piece) return true;
+        const opponentAttackers = state.board[i].attackingPieces.filter((piece) => piece.isWhite !== state.whiteToMove);
+        if (opponentAttackers.length > 0) return true;
+    }
+  }
+  if (move.from === 60 && move.to === 58) {
+    for (let i = 57; i <= 59; i++) {
+      if (state.board[i].piece) return true;
+        const opponentAttackers = state.board[i].attackingPieces.filter((piece) => piece.isWhite !== state.whiteToMove);
+        if (opponentAttackers.length > 0) return true;
+    }
+  }
+  return false;
+}
+
+function makeCastlingMove(state: GameState, move: Move): GameState {
+  const newState = {...state};
+  if (move.from === 4 && move.to === 6) {
+    newState.board[5].piece = newState.board[7].piece;
+    newState.board[7].piece = undefined;
+  }
+  if (move.from === 4 && move.to === 2) {
+    newState.board[3].piece = newState.board[0].piece;
+    newState.board[0].piece = undefined;
+  }
+  if (move.from === 60 && move.to === 62) {
+    newState.board[61].piece = newState.board[63].piece;
+    newState.board[63].piece = undefined;
+  }
+  if (move.from === 60 && move.to === 58) {
+    newState.board[59].piece = newState.board[56].piece;
+    newState.board[56].piece = undefined;
+  }
+  return newState;
+}
+
+
+
 function updateSquaresUnderAttack(board: Square[]): Square[] {
   const newBoard: Square[] = board.map((square) => {
     return {
