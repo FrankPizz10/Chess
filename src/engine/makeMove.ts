@@ -38,7 +38,7 @@ export function makeMove(state: GameState, move: Move): GameState {
   // TODO: en passant
   // TODO: pawn promotion
   // TODO: cannot castle out of check
-  
+
   // check if the king is in check
   if (isKingInCheck(newState.board, newState.whiteToMove)) {
     throw new Error("Invalid move - puts king in check");
@@ -114,6 +114,8 @@ function isGameOver(state: GameState): boolean {
 
 function isValidCastlingMove(state: GameState, move: Move): boolean {
   const curPlayer = state.players.find((player) => player.isWhite === state.whiteToMove)!;
+  if (state.board[move.from].piece?.type !== PieceType.King) return false;
+  if (state.board[move.to].piece?.type !== PieceType.Rook) return false;
   if (move.from === 4 && move.to === 6 && curPlayer.canCastleKingSide) {
     return !castlingSquaresOccupiedOrUnderAttack(state, move);
   }
