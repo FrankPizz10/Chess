@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./App.css";
+import "./Styles/App.css";
 import { GameState, makeNewGame, } from "./engine/state";
 import { makeMove } from "./engine/makeMove";
-import { SquareComp } from "./Square";
+import { SquareComp } from "./Components/Square";
 
 const boardArr = Array.from({ length: 64 }, (_, i) => i);
 
