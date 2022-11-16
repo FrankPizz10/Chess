@@ -233,11 +233,12 @@ function updateSquaresUnderAttack(board: Square[]): Square[] {
 function insufficientMaterial(board: Square[]): boolean {
   const whitePieces = board.filter((square) => square.piece && square.piece.isWhite).map((square) => square.piece!);
   const blackPieces = board.filter((square) => square.piece && !square.piece.isWhite).map((square) => square.piece!);
-  return insufficientCombination(whitePieces) || insufficientCombination(blackPieces);
+  return insufficientCombination(whitePieces) && insufficientCombination(blackPieces);
 }
 
 function insufficientCombination(pieces: Piece[]): boolean {
-  const filteredPieces = pieces.filter((piece) => piece.type === PieceType.King 
-  || piece.type === PieceType.Bishop || piece.type === PieceType.Knight);
-  return filteredPieces.length <= 2;
+  if (pieces.length > 2) return false;
+  if (pieces.length === 1) return true;
+  const otherPiece = pieces.find((piece) => piece.type !== PieceType.King);
+  return otherPiece?.type === PieceType.Bishop || otherPiece?.type === PieceType.Knight;
 }
