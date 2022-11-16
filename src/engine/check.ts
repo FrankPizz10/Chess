@@ -1,5 +1,6 @@
 import { attackingSquares } from "./board";
 import { Piece, PieceType, Square } from "./state";
+import * as lodash from "lodash";
 
 export function isKingInCheckmate(board: Square[], whiteToMove: boolean): boolean {
   if (!isKingInCheck(board, whiteToMove)) return false;
@@ -43,11 +44,11 @@ function canPieceBlockCheck(board: Square[], whiteToMove: boolean): boolean {
     const possibleBlockers = board[square].movablePieces.filter((piece) => piece.isWhite === whiteToMove);
     // if there is a piece that can move to that square, add that piece to a list of pieces that (maybe) can block the check
     if (possibleBlockers.length < 1) continue;
-      // for each piece in the list of pieces that can block the check, physically move the piece to the square to block, and check isKingInCheck
-      for (const blocker of possibleBlockers) {
-        // If the move does not put the king in check, then the piece can block the check
-        if (pseudoMove(JSON.parse(JSON.stringify(board)), blocker, square)) return true;
-      }
+    // for each piece in the list of pieces that can block the check, physically move the piece to the square to block, and check isKingInCheck
+    for (const blocker of possibleBlockers) {
+      // If the move does not put the king in check, then the piece can block the check
+      if (pseudoMove(board, blocker, square)) return true;
+    }
   }
   return false;
 }
@@ -103,8 +104,9 @@ function squaresBetween(position1: number, position2: number): number[] {
 
 // Determines if the move will put king in check
 function pseudoMove(board: Square[], piece: Piece, position: number): boolean {
-  const piecePosition = board.findIndex((square) => square.piece === piece);
-  board[position].piece = piece;
-  board[piecePosition].piece = undefined;
-  return isKingInCheck(board, piece.isWhite);
+  const clone = lodash.cloneDeep(board);
+  const piecePosition = clone.findIndex((square) => square.piece === piece);
+  clone[position].piece = piece;
+  clone[piecePosition].piece = undefined;
+  return isKingInCheck(clone, piece.isWhite);
 }

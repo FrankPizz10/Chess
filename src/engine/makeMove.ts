@@ -1,7 +1,7 @@
 import { attackingSquares } from "./board";
 import { isKingInCheck, isKingInCheckmate } from "./check";
 import { Move } from "./move";
-import { GameState, PieceType, Square } from "./state";
+import { GameState, Piece, PieceType, Square } from "./state";
 
 export function makeMove(state: GameState, move: Move): GameState {
   if (!isValidMove(state, move)) {
@@ -16,7 +16,33 @@ export function makeMove(state: GameState, move: Move): GameState {
   }
 
   // move the piece
-  newState = {
+  newState = updateState(newState, move, piece);
+  
+  // TODO: en passant
+  // TODO: pawn promotion
+  // TODO: cannot castle out of check
+
+  // check if the king is in check
+  if (isKingInCheck(newState.board, newState.whiteToMove)) {
+    throw new Error("Invalid move - puts king in check");
+  }
+
+  newState = updateCastlingStatus(newState, piece, move);
+  
+  newState.whiteToMove = !newState.whiteToMove;
+
+  try {
+    isGameOver(newState)
+  }
+  catch (e) {
+    alert(e);
+  }
+
+  return newState;
+}
+
+function updateState(state: GameState, move: Move, piece: Piece): GameState {
+  const updateState = {
     ...state,
     board: updateSquaresUnderAttack(state.board.map((square, index) => {
       if (index === move.from) {
@@ -34,46 +60,33 @@ export function makeMove(state: GameState, move: Move): GameState {
       return square;
     })),
   }
-  
-  // TODO: en passant
-  // TODO: pawn promotion
-  // TODO: cannot castle out of check
+  return updateState;
+}
 
-  // check if the king is in check
-  if (isKingInCheck(newState.board, newState.whiteToMove)) {
-    throw new Error("Invalid move - puts king in check");
-  }
-
-  const curPlayer = newState.players.find((player) => player.isWhite === newState.whiteToMove)!;
-  if (piece.type === PieceType.King) {
-    curPlayer.canCastleKingSide = false;
-    curPlayer.canCastleQueenSide = false;
-  }
-  if (piece.type === PieceType.Rook) {
-    if (move.from === 0) {
+function updateCastlingStatus(state: GameState, piece: Piece, move: Move): GameState {
+  const updateState = {...state}
+  const curPlayer = updateState.players.find((player) => player.isWhite === state.whiteToMove)!;
+  updateState.players.map(() => {
+    if (piece.type === PieceType.King) {
+      curPlayer.canCastleKingSide = false;
       curPlayer.canCastleQueenSide = false;
     }
-    if (move.from === 7) {
-      curPlayer.canCastleKingSide = false;
+    if (piece.type === PieceType.Rook) {
+      if (move.from === 0) {
+        curPlayer.canCastleQueenSide = false;
+      }
+      if (move.from === 7) {
+        curPlayer.canCastleKingSide = false;
+      }
+      if (move.from === 56) {
+        curPlayer.canCastleQueenSide = false;
+      }
+      if (move.from === 63) {
+        curPlayer.canCastleKingSide = false;
+      }
     }
-    if (move.from === 56) {
-      curPlayer.canCastleQueenSide = false;
-    }
-    if (move.from === 63) {
-      curPlayer.canCastleKingSide = false;
-    }
-  }
-  
-  newState.whiteToMove = !newState.whiteToMove;
-
-  try {
-    isGameOver(newState)
-  }
-  catch (e) {
-    alert(e);
-  }
-
-  return newState;
+  })
+  return updateState;
 }
 
 /**
@@ -105,6 +118,9 @@ function isGameOver(state: GameState): boolean {
 
   // stalemate
   // insufficient material
+  if (insufficientMaterial(state.board)) {
+    throw new Error("Insufficient material");
+  }
 
   // threefold repetition
   // plan: keep a list of all previous board states, and check if the current board state is in the list
@@ -212,4 +228,16 @@ function updateSquaresUnderAttack(board: Square[]): Square[] {
     }
   }
   return newBoard;
+}
+
+function insufficientMaterial(board: Square[]): boolean {
+  const whitePieces = board.filter((square) => square.piece && square.piece.isWhite).map((square) => square.piece!);
+  const blackPieces = board.filter((square) => square.piece && !square.piece.isWhite).map((square) => square.piece!);
+  return insufficientCombination(whitePieces) || insufficientCombination(blackPieces);
+}
+
+function insufficientCombination(pieces: Piece[]): boolean {
+  const filteredPieces = pieces.filter((piece) => piece.type === PieceType.King 
+  || piece.type === PieceType.Bishop || piece.type === PieceType.Knight);
+  return filteredPieces.length <= 2;
 }

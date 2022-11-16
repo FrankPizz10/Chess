@@ -21,9 +21,15 @@ function App() {
         to: square2,
       });
       setGameState(newGameState);
+      playMoveSound();
     } catch (e) {
       window.alert(e);
     }
+  };
+
+  const playMoveSound = () => {
+    const audio = new Audio(require("./Sounds/standard-move.wav"));
+    audio.play();
   };
 
   const onSquareClicked = (position: number) => {
