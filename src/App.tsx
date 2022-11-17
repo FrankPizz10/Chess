@@ -46,7 +46,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Chess App</h1>
+        <h1>Frank's Chess App</h1>
       </header>
       <div className="board-container">
       <div className="chess-board">
