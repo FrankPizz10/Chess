@@ -54,7 +54,7 @@ export const SquareComp: React.FC<{ square: Square; onClick: () => void, piece: 
   piece,
   index,
 }) => {
-    const color = index % 2 === (Math.floor(index / 8)) % 2 ? "dark" : "light";
+    const color = index % 2 === (Math.floor(index / 8)) % 2 ? "light" : "dark";
   return (
     <div className={"square " + color} onClick={() => onClick()}>
         { piece && <img src={getSvg(piece)} />}
