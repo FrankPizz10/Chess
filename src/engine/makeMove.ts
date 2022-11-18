@@ -1,7 +1,7 @@
 import { attackingSquares } from "./board";
 import { isKingInCheck, isKingInCheckmate } from "./check";
 import { Move } from "./move";
-import { GameState, Piece, PieceType, Square } from "./state";
+import { EndStatus, GameState, Piece, PieceType, Square } from "./state";
 
 export function makeMove(state: GameState, move: Move): GameState {
   if (!isValidMove(state, move)) {
@@ -30,13 +30,6 @@ export function makeMove(state: GameState, move: Move): GameState {
   newState = updateCastlingStatus(newState, piece, move);
   
   newState.whiteToMove = !newState.whiteToMove;
-
-  try {
-    isGameOver(newState)
-  }
-  catch (e) {
-    alert(e);
-  }
 
   return newState;
 }
@@ -110,22 +103,22 @@ function isValidMove(state: GameState, move: Move): boolean {
   return true;
 }
 
-function isGameOver(state: GameState): boolean {
+export function isGameOver(state: GameState): EndStatus {
   // checkmate
   if (isKingInCheckmate(state.board, state.whiteToMove)) {
-    throw new Error("Checkmate");
+    return EndStatus.Checkmate;
   }
 
   // stalemate
   // insufficient material
   if (insufficientMaterial(state.board)) {
-    throw new Error("Insufficient material");
+    return EndStatus.InsufficientMaterial;
   }
 
   // threefold repetition
   // plan: keep a list of all previous board states, and check if the current board state is in the list
   // encode the board state as an array of integers, where each integer represents a piece on the board
-  return false;
+  return EndStatus.InProgress;
 }
 
 function isValidCastlingMove(state: GameState, move: Move): boolean {

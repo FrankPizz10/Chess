@@ -31,6 +31,13 @@ type Player = {
   canCastleQueenSide: boolean;
 }
 
+export enum EndStatus {
+  Checkmate = 'Checkmate',
+  InsufficientMaterial = 'InsufficientMaterial',
+  InProgress = 'InProgress',
+}
+
+
 export function makeNewGame(): GameState{
   return {
     whiteToMove: true,

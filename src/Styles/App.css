@@ -19,6 +19,14 @@ h1 {
   margin: 0.2em;
 }
 
+.toast-container {
+  color: rgb(34, 163, 248);
+  font-weight: bold;
+  font-size: 30px;
+  width: 34vw;
+  padding: 30px 20px;
+}
+
 .board-container {
   display: flex;
   flex-direction: column;

@@ -4,8 +4,7 @@ import * as lodash from "lodash";
 
 export function isKingInCheckmate(board: Square[], whiteToMove: boolean): boolean {
   if (!isKingInCheck(board, whiteToMove)) return false;
-  console.log("Check!");
-  return (canKingMove(board, whiteToMove) || canPieceBlockCheck(board, whiteToMove) || canPieceCaptureAttacker(board, whiteToMove));
+  return !(canKingMove(board, whiteToMove) || canPieceBlockCheck(board, whiteToMove) || canPieceCaptureAttacker(board, whiteToMove));
 }
 
 export function isKingInCheck(board: Square[], whiteToMove: boolean): boolean {
