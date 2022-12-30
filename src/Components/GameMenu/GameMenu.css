@@ -1,0 +1,42 @@
+.GameMenu {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #6876e0;
+}
+
+.Title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ChooseGame {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.GameList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.GameType {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin: 1rem;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #08d;
+    cursor: pointer;
+    width: 25%;
+}

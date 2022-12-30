@@ -1,0 +1,24 @@
+.board-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3vh;
+}
+
+.chess-board {
+  width: 35%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  row-gap: 2px;
+  column-gap: 2px;
+  background-color: #000000;
+  padding: 1vh;
+}
+
+@media (max-width: 768px) {
+  .chess-board {
+    width: 60%;
+  }
+}

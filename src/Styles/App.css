@@ -1,12 +1,13 @@
 .App {
   text-align: center;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   resize: both;
+  background-color: #6876e0;
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #15172b;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,52 +26,4 @@ h1 {
   font-size: 30px;
   width: 34vw;
   padding: 30px 20px;
-}
-
-.board-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 3vh;
-}
-
-.chess-board {
-  width: 35%;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
-  row-gap: 2px;
-  column-gap: 2px;
-  background-color: #000000;
-  padding: 1vh;
-}
-
-@media (max-width: 768px) {
-  .chess-board {
-    width: 80%;
-  }
-}
-
-.square {
-  font-size: 2vh;
-  text-align: center;
-}
-
-.square > img {
-  width: 100%;
-  height: auto;
-}
-
-.square.light {
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-.square.dark {
-  background-color: rgba(19, 139, 8, 0.8);
-}
-
-.dark-square > img {
-  width: 5vh;
-  height: 5vh;
 }

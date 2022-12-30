@@ -1,0 +1,44 @@
+.SignUpPage {
+    background-color: #15172b;
+    border-radius: 20px;
+    box-sizing: border-box;
+    height: 500px;
+    padding: 20px;
+    width: 320px;
+}
+
+.SignUpTitle {
+    color: #eee;
+    font-family: sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.input-container {
+    height: 50px;
+    position: relative;
+    width: 100%;
+}
+
+.SignInButton {
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 20px;
+  margin-top: 30px;
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.SignInButton:hover {
+  color: #08d;
+}
+
+.PlayerExists {
+  color: #dc2f55;
+  font-family: sans-serif;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

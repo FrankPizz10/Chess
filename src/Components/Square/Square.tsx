@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import makePlayerMove from "../App";
-import { Piece, PieceType, Square } from "../engine/state";
-import WhiteKing from "../Pieces/king-white.svg";
-import BlackKing from "../Pieces/king-black.svg";
-import WhiteQueen from "../Pieces/queen-white.svg";
-import BlackQueen from "../Pieces/queen-black.svg";
-import WhiteRook from "../Pieces/rook-white.svg";
-import BlackRook from "../Pieces/rook-black.svg";
-import WhiteBishop from "../Pieces/bishop-white.svg";
-import BlackBishop from "../Pieces/bishop-black.svg";
-import WhiteKnight from "../Pieces/knight-white.svg";
-import BlackKnight from "../Pieces/knight-black.svg";
-import WhitePawn from "../Pieces/pawn-white.svg";
-import BlackPawn from "../Pieces/pawn-black.svg";
+import { motion } from "framer-motion";
+import { Piece, PieceType, Square } from "../../engine/state";
+import WhiteKing from "../../Pieces/king-white.svg";
+import BlackKing from "../../Pieces/king-black.svg";
+import WhiteQueen from "../../Pieces/queen-white.svg";
+import BlackQueen from "../../Pieces/queen-black.svg";
+import WhiteRook from "../../Pieces/rook-white.svg";
+import BlackRook from "../../Pieces/rook-black.svg";
+import WhiteBishop from "../../Pieces/bishop-white.svg";
+import BlackBishop from "../../Pieces/bishop-black.svg";
+import WhiteKnight from "../../Pieces/knight-white.svg";
+import BlackKnight from "../../Pieces/knight-black.svg";
+import WhitePawn from "../../Pieces/pawn-white.svg";
+import BlackPawn from "../../Pieces/pawn-black.svg";
+
+import "./Square.css";
 
 function getSvg(piece: Piece) {
     if (piece.isWhite) {
@@ -48,7 +50,7 @@ function getSvg(piece: Piece) {
     }
 }
 
-export const SquareComp: React.FC<{ square: Square; onClick: () => void, piece: Piece | undefined, index: number }> = ({
+const SquareComp: React.FC<{ square: Square; onClick: () => void, piece: Piece | undefined, index: number }> = ({
   square,
   onClick,
   piece,
@@ -56,8 +58,18 @@ export const SquareComp: React.FC<{ square: Square; onClick: () => void, piece: 
 }) => {
     const color = index % 2 === (Math.floor(index / 8)) % 2 ? "light" : "dark";
   return (
-    <div className={"square " + color} onClick={() => onClick()}>
-        { piece && <img src={getSvg(piece)} />}
+    <div 
+        className={"square " + color} 
+        onClick={() => onClick()}
+    >
+        { piece && 
+            <motion.img 
+                whileHover={{ scale: 1.15 }}
+                src={getSvg(piece)} 
+            />
+        }
     </div>
   );
 };
+
+export default SquareComp;
