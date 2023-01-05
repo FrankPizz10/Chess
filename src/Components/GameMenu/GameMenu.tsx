@@ -29,14 +29,14 @@ const GameMenu: React.FC<{gameType: GameType | undefined, setGameType: (gameType
                     className="GameType" 
                     onClick={() => handleGameClick(GameType.TwoPlayer)}
                 >
-                    <h3>{GameType.TwoPlayer}</h3>
+                    <h3>Two Player</h3>
                 </motion.div>
                 <motion.div 
                     whileHover={{scale: 1.1}}
                     className="GameType" 
                     onClick={() => handleGameClick(GameType.Online)}
                 >
-                    <h3>{GameType.Online}</h3>
+                    <h3>Online</h3>
                 </motion.div>
             </div>
         </div>

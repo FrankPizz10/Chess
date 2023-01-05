@@ -4,10 +4,12 @@ import { getPlayer } from "../SignIn/SignIn";
 
 import "./SignUp.css";
 
-async function checkExisitngPlayer(email: string) {
-    const player = await getPlayer(email);
-    if (player) {
+async function checkExisitngPlayer(userName: string) {
+    try {
+        const player = await getPlayer(userName);
         return true;
+    } catch (err) {
+        return false;
     }
 }
 
@@ -15,12 +17,12 @@ const SignUp: React.FC<{setPlayer: (player: IPlayer | undefined) => void, setSig
     setPlayer,
     setSignUp,
 }) => {
-    const [email, setEmail] = useState("");
+    const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [playerExists, setPlayerExists] = useState(false);
 
-    const handleEmailChange = (e: any) => {
-        setEmail(e.target.value);
+    const handleUserNameChange = (e: any) => {
+        setUserName(e.target.value);
     }
 
     const handlePasswordChange = (e: any) => {
@@ -28,6 +30,7 @@ const SignUp: React.FC<{setPlayer: (player: IPlayer | undefined) => void, setSig
     }
 
     const handleSignUpClick = () => {
+        console.log("signing up");
         createPlayer();
     }
 
@@ -37,7 +40,7 @@ const SignUp: React.FC<{setPlayer: (player: IPlayer | undefined) => void, setSig
     };
 
     const createPlayer = async () => {
-        if (await checkExisitngPlayer(email)) {
+        if (await checkExisitngPlayer(userName)) {
             setPlayerExists(true);
             return;
         }
@@ -49,7 +52,7 @@ const SignUp: React.FC<{setPlayer: (player: IPlayer | undefined) => void, setSig
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    userName: email,
+                    userName: userName,
                     password: password,
                     elo: 1000,
                 }),
@@ -65,7 +68,7 @@ const SignUp: React.FC<{setPlayer: (player: IPlayer | undefined) => void, setSig
         }
         player = {
             id: playerId,
-            userName: email,
+            userName: userName,
             password: password,
             elo: 1000,
         };
@@ -76,9 +79,9 @@ const SignUp: React.FC<{setPlayer: (player: IPlayer | undefined) => void, setSig
         <div className="SignUpPage">
             <h2 className="SignUpTitle">Create Account</h2>
             <div className="input-container ic1">
-                <input id="emil" className="input" type="text" placeholder=" " onChange={handleEmailChange} />
+                <input id="emil" className="input" type="text" placeholder=" " onChange={handleUserNameChange} />
                 <div className="cut"></div>
-                <label htmlFor="firstname" className="placeholder">Email</label>
+                <label htmlFor="firstname" className="placeholder">Username</label>
             </div>
             <div className="input-container ic2">
                 <input id="password" className="input" type="text" placeholder=" " onChange={handlePasswordChange} />
