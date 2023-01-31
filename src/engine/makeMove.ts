@@ -8,11 +8,17 @@ export function makeMove(state: GameState, move: Move): GameState {
     throw new Error("Invalid move");
   }
 
-  const piece = state.board[move.from].piece!;
+  let piece = state.board[move.from].piece!;
   let newState = { ...state };
 
   if (piece.type === PieceType.King && Math.abs(move.from - move.to) === 2) {
     newState = makeCastlingMove(state, move);
+  }
+
+  if (checkPromotion(move, piece)) {
+    console.log("promotion");
+    newState = makePromotionMove(state, move, piece);
+    piece = newState.board[move.to].piece!;
   }
 
   // move the piece
@@ -30,6 +36,7 @@ export function makeMove(state: GameState, move: Move): GameState {
   newState = updateCastlingStatus(newState, piece, move);
 
   newState.whiteToMove = !newState.whiteToMove;
+  console.log("newState", newState);
 
   return newState;
 }
@@ -56,6 +63,31 @@ function updateState(state: GameState, move: Move, piece: Piece): GameState {
     ),
   };
   return updateState;
+}
+
+function checkPromotion(move: Move, piece: Piece): boolean {
+  if (piece.type !== PieceType.Pawn) return false;
+  if (piece.isWhite && move.to <= 7) return true;
+  if (!piece.isWhite && move.to >= 56) return true;
+  return false;
+}
+
+function makePromotionMove(
+  state: GameState,
+  move: Move,
+  piece: Piece
+): GameState {
+  const newState = { ...state };
+  // if (!move.promotionPiece) {
+  //   throw new Error("Invalid move - promotion piece not specified");
+  // }
+  newState.board[move.to].piece = {
+    ...piece,
+    type: PieceType.Queen,
+  };
+  newState.board[move.from].piece = undefined;
+  console.log("MPMState", newState);
+  return newState;
 }
 
 function updateCastlingStatus(
