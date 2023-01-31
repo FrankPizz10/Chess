@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./Styles/App.css";
-import { EndStatus, GameState, makeNewGame, } from "./engine/state";
+import { EndStatus, GameState, makeNewGame } from "./engine/state";
 import { makeMove, isGameOver } from "./engine/makeMove";
 import { SquareComp } from "./Components/Square";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const boardArr = Array.from({ length: 64 }, (_, i) => i);
 
@@ -13,13 +13,9 @@ function App() {
   const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState<boolean>(false);
 
-  const logState = () => {
-    console.log(gameState);
-  };
-
   const makePlayerMove = (square1: number, square2: number) => {
     if (!gameOver) {
-      try{
+      try {
         const newGameState = makeMove(gameState, {
           from: square1,
           to: square2,
@@ -27,11 +23,10 @@ function App() {
         setGameState(newGameState);
         playMoveSound();
         const endStatus = isGameOver(newGameState);
-        console.log(endStatus.toString());
-        if (endStatus != EndStatus.InProgress) {
+        if (endStatus !== EndStatus.InProgress) {
           toast(endStatus.toString());
           setGameOver(true);
-        } 
+        }
       } catch (e) {
         window.alert(e);
       }
@@ -59,7 +54,7 @@ function App() {
       <header className="App-header">
         <h1>Frank's Chess App</h1>
       </header>
-      <ToastContainer 
+      <ToastContainer
         bodyClassName={"toast-container"}
         autoClose={500000}
         position="top-center"
@@ -72,24 +67,23 @@ function App() {
         theme="colored"
       />
       <div className="board-container">
-      <div className="chess-board">
-        {boardArr.map((i) => {
-          const square = gameState.board[i];
-          return (
-            <SquareComp
-              square={square}
-              onClick={() => onSquareClicked(i)}
-              piece={square.piece}
-              key={i}
-              index={i}
-            />
-          );
-        })}
-      </div>
+        <div className="chess-board">
+          {boardArr.map((i) => {
+            const square = gameState.board[i];
+            return (
+              <SquareComp
+                square={square}
+                onClick={() => onSquareClicked(i)}
+                piece={square.piece}
+                key={i}
+                index={i}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
 export default App;
-
