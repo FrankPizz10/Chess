@@ -25,7 +25,6 @@ export function makeMove(state: GameState, move: Move): GameState {
   newState = updateState(newState, move, piece);
 
   // TODO: en passant
-  // TODO: pawn promotion
   // TODO: cannot castle out of check
 
   // check if the king is in check
@@ -137,7 +136,9 @@ function isValidMove(state: GameState, move: Move): boolean {
   ) {
     return isValidCastlingMove(state, move);
   }
-  if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) return false;
+  if (!pieceToMove || pieceToMove.isWhite !== state.whiteToMove) {
+    throw new Error("Invalid move - not your turn");
+  }
 
   const occupyingPiece = state.board[move.to]?.piece;
   if (

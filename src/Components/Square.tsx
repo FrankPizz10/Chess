@@ -1,5 +1,6 @@
 import React from "react";
-import { Piece, PieceType, Square } from "../engine/state";
+import { Piece, PieceType } from "../engine/state";
+import { HighLight } from "../App";
 import WhiteKing from "../Pieces/king-white.svg";
 import BlackKing from "../Pieces/king-black.svg";
 import WhiteQueen from "../Pieces/queen-white.svg";
@@ -48,15 +49,15 @@ function getSvg(piece: Piece) {
 }
 
 export const SquareComp: React.FC<{
-  square: Square;
   onClick: () => void;
   piece: Piece | undefined;
+  highlighted: HighLight;
   index: number;
-}> = ({ square, onClick, piece, index }) => {
+}> = ({ onClick, piece, highlighted, index }) => {
   const color = index % 2 === Math.floor(index / 8) % 2 ? "light" : "dark";
   return (
-    <div className={"square " + color} onClick={() => onClick()}>
-      {piece && <img src={getSvg(piece)} alt="Piece" />}
+    <div className={"square " + color + highlighted} onClick={() => onClick()}>
+      {piece && <img className="piece-img" src={getSvg(piece)} alt="Piece" />}
     </div>
   );
 };

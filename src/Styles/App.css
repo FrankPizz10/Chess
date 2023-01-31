@@ -57,9 +57,18 @@ h1 {
   text-align: center;
 }
 
-.square > img {
+.piece-img {
   width: 100%;
   height: auto;
+  cursor: pointer;
+}
+
+.piece-img:hover {
+  transform: scale(1.1);
+}
+
+.square.highlighted {
+  background-color: gold !important;
 }
 
 .square.light {
@@ -70,7 +79,7 @@ h1 {
   background-color: rgba(19, 139, 8, 0.8);
 }
 
-.dark-square > img {
+.dark-square>img {
   width: 5vh;
   height: 5vh;
 }

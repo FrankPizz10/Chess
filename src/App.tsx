@@ -8,10 +8,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 const boardArr = Array.from({ length: 64 }, (_, i) => i);
 
+export type HighLight = "" | " highlighted";
+
 function App() {
   const [gameState, setGameState] = useState<GameState>(makeNewGame());
   const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [highlightedSquares, setHighlightedSquares] = useState<HighLight[]>(Array.from({ length: 64 }, () => ""));
 
   const makePlayerMove = (square1: number, square2: number) => {
     if (!gameOver) {
@@ -41,10 +44,18 @@ function App() {
   const onSquareClicked = (position: number) => {
     if (selectedSquare !== null) {
       if (selectedSquare !== position) {
+        setHighlightedSquares(highlightedSquares.map((pos, i) => i === position ? " highlighted" : ""));
         makePlayerMove(selectedSquare, position);
+        setTimeout(() => {
+          setHighlightedSquares(highlightedSquares.map((pos, i) => ""));
+        }, 1000);
       }
+      setTimeout(() => {
+        setHighlightedSquares(highlightedSquares.map((pos, i) => ""));
+      }, 1000);
       setSelectedSquare(null);
     } else {
+      setHighlightedSquares(highlightedSquares.map((pos, i) => i === position ? " highlighted" : ""));
       setSelectedSquare(position);
     }
   };
@@ -72,9 +83,9 @@ function App() {
             const square = gameState.board[i];
             return (
               <SquareComp
-                square={square}
                 onClick={() => onSquareClicked(i)}
                 piece={square.piece}
+                highlighted={highlightedSquares[i]}
                 key={i}
                 index={i}
               />
